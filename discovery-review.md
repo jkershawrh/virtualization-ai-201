@@ -2,15 +2,27 @@
 
 Source: `/Users/jkershaw/Documents/virtualization-ai-foundations`  
 Destination: `/Users/jkershaw/Documents/virtualization-ai-201`  
-Blueprint status: **draft**
+Blueprint status: **reviewed with one explicit live-platform unknown**
 
 ## Automated findings
 
 - 108 candidate source artifacts recorded.
 - 4 runtime-object candidates detected.
-- AI signal: `agentic`; necessity: `unknown`.
+- AI signal: `generative-llm`; necessity: `bounded and required only for the advisory interpretation`.
 
-These are discovery candidates, not approved presentation claims.
+The upstream 101 repository is an immutable prerequisite reference. Its learner
+evidence is not copied or accepted as 201 construction evidence.
+
+## Resolved 201 outcome
+
+- The learner authors the request/response contract, VM client, Secret
+  reference, Service, NetworkPolicy, and adapter integration.
+- The learner proves a healthy path and a fail-closed model-unavailable path,
+  joins both with correlation evidence, keeps final authority human, and
+  performs cleanup.
+- LIVE remains blocked until Launchpad supplies and qualifies an approved
+  OpenShift Virtualization environment and managed Intel Xeon model endpoint.
+- The intentional CDD RED receipt is recorded in `docs/cdd-red-run.md`.
 
 ## Required review
 

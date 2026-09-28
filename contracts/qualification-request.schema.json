@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://virtualization-ai.redhat-intel.com/contracts/qualification-request.schema.json",
+  "title": "Virtualization AI 201 qualification request",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "correlation_id", "guest", "task", "note", "allowed_categories"],
+  "properties": {
+    "schema_version": {"const": "virtualization-ai.redhat-intel.com/qualification-request/v1"},
+    "correlation_id": {"type": "string", "format": "uuid"},
+    "guest": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "namespace"],
+      "properties": {
+        "name": {"type": "string", "minLength": 1, "maxLength": 63},
+        "namespace": {"type": "string", "minLength": 1, "maxLength": 63}
+      }
+    },
+    "task": {"const": "classify-operations-note"},
+    "note": {"type": "string", "minLength": 1, "maxLength": 1000},
+    "allowed_categories": {
+      "type": "array",
+      "minItems": 4,
+      "maxItems": 4,
+      "uniqueItems": true,
+      "items": {"enum": ["application", "capacity", "connectivity", "unknown"]}
+    }
+  }
+}

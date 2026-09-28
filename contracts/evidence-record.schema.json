@@ -1,0 +1,23 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://virtualization-ai.redhat-intel.com/contracts/evidence-record.schema.json",
+  "title": "Virtualization AI 201 evidence record",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "evidence_id", "correlation_id", "guest", "request_sha256", "service", "source_state", "outcome", "ai_participated", "validation", "authority", "created_at"],
+  "properties": {
+    "schema_version": {"const": "virtualization-ai.redhat-intel.com/evidence-record/v1"},
+    "evidence_id": {"type": "string", "format": "uuid"},
+    "correlation_id": {"type": "string", "format": "uuid"},
+    "guest": {"type": "string", "minLength": 1},
+    "request_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "service": {"const": "virtualization-ai-201-adapter:8080"},
+    "source_state": {"enum": ["LIVE", "REHEARSAL", "OFFLINE"]},
+    "outcome": {"enum": ["QUALIFIED", "MODEL_UNAVAILABLE"]},
+    "ai_participated": {"type": "boolean"},
+    "model_id": {"type": ["string", "null"]},
+    "validation": {"enum": ["PASS", "FAIL_CLOSED"]},
+    "authority": {"const": "HUMAN_REVIEW_REQUIRED"},
+    "created_at": {"type": "string", "format": "date-time"}
+  }
+}

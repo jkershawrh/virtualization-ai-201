@@ -1,180 +1,356 @@
 version: 1
-status: draft
+status: reviewed
+
 source:
-  name: "virtualization-ai-foundations"
-  kind: repository
-  location: "/Users/jkershaw/Documents/virtualization-ai-foundations"
-  revision: "d84eabd"
-  discovered_at: "2026-09-28T19:53:35.880Z"
+  name: virtualization-ai-foundations-101
+  kind: upstream-prerequisite
+  location: https://github.com/jkershawrh/virtualization-ai-foundations
+  revision: d84eabdd709f573caaf781763b361018e9ec04a6
+  discovered_at: "2026-09-28"
   inspected_artifacts:
-    - ".github/workflows/release-images.yml"
-    - "Containerfile"
-    - "README.md"
-    - "artifacts/README.md"
-    - "artifacts/adapter-sbom.cdx.json"
-    - "artifacts/adapter-trivy.json"
-    - "artifacts/presentation-sbom.cdx.json"
-    - "artifacts/presentation-trivy.json"
-    - "charts/virtualization-ai-foundations/Chart.yaml"
-    - "charts/virtualization-ai-foundations/files/vm_client.py"
-    - "charts/virtualization-ai-foundations/templates/adapter.yaml"
-    - "charts/virtualization-ai-foundations/templates/networkpolicy.yaml"
-    - "charts/virtualization-ai-foundations/templates/presentation.yaml"
-    - "charts/virtualization-ai-foundations/templates/serviceaccount.yaml"
-    - "charts/virtualization-ai-foundations/templates/vm.yaml"
-    - "charts/virtualization-ai-foundations/values.candidate.yaml"
-    - "charts/virtualization-ai-foundations/values.published.yaml"
-    - "charts/virtualization-ai-foundations/values.yaml"
-    - "contracts/analysis-request.schema.json"
-    - "contracts/analysis-response.schema.json"
-    - "contracts/evidence-record.schema.json"
-    - "contracts/examples/healthy-request.json"
-    - "contracts/examples/healthy-response.json"
-    - "contracts/examples/unavailable-response.json"
-    - "contracts/openapi.yaml"
-    - "demo-blueprint.yaml"
-    - "deploy/secret.example.yaml"
-    - "discovery-review.md"
-    - "docs/immutable-release.md"
-    - "docs/implementation-recommendation.md"
-    - "docs/journey-acceptance-matrix.md"
-    - "docs/packaging-evidence.md"
-    - "docs/rehearsal-checklist.md"
-    - "docs/source-discrepancies.md"
-    - "handoff/catalog-certification.proposed.yaml"
-    - "handoff/catalog-onboarding.proposed.yaml"
-    - "handoff/evidence/factory-development-journey.json"
-    - "handoff/evidence/factory-zero-residue.json"
-    - "handoff/evidence/presentation-artifact-release.json"
-    - "handoff/evidence/presentation-verification.json"
-    - "handoff/evidence/published-adapter-release.json"
-    - "handoff/evidence/published-presentation-release.json"
-    - "handoff/evidence/published-release.json"
-    - "handoff/evidence/workload-artifact-release.json"
-    - "handoff/launchpad-handoff.yaml"
-    - "package-lock.json"
-    - "package.json"
-    - "playwright.config.ts"
-    - "showroom/content/antora.yml"
-    - "showroom/content/modules/ROOT/nav.adoc"
-    - "showroom/content/modules/ROOT/pages/01-verify.adoc"
-    - "showroom/content/modules/ROOT/pages/02-trace.adoc"
-    - "showroom/content/modules/ROOT/pages/03-invoke.adoc"
-    - "showroom/content/modules/ROOT/pages/04-inspect.adoc"
-    - "showroom/content/modules/ROOT/pages/05-failure.adoc"
-    - "showroom/content/modules/ROOT/pages/06-evidence.adoc"
-    - "showroom/content/modules/ROOT/pages/99-conclusion.adoc"
-    - "showroom/content/modules/ROOT/pages/index.adoc"
-    - "showroom/default-site.yml"
-    - "src/App.test.tsx"
-    - "src/App.tsx"
-    - "src/components/BrandLockup.tsx"
-    - "src/components/DemoHeader.tsx"
-    - "src/components/Finale.tsx"
-    - "src/components/Opening.tsx"
-    - "src/config/validate.test.ts"
-    - "src/config/validate.ts"
-    - "src/demo.config.ts"
-    - "src/live/adapters.ts"
-    - "src/live/demoAdapter.ts"
-    - "src/live/fixtures/healthy.json"
-    - "src/live/fixtures/unavailable.json"
-    - "src/live/proof.test.ts"
-    - "src/live/proof.ts"
-    - "src/live/useLiveProof.ts"
-    - "src/main.tsx"
-    - "src/scenes/LiveJourney.tsx"
-    - "src/scenes/LiveProof.tsx"
-    - "src/scenes/SceneFrame.tsx"
-    - "src/scenes/SceneRenderer.test.tsx"
-    - "src/scenes/SceneRenderer.tsx"
-    - "src/scenes/TechnicalTopology.tsx"
-    - "src/test/setup.ts"
-    - "src/types.ts"
-    - "src/vite-env.d.ts"
-    - "story.brief.yaml"
-    - "test-results/.last-run.json"
-    - "tests/benchmark_rubric.yaml"
-    - "tests/claim_registry.yaml"
-    - "tests/test_contracts.py"
-    - "tests/test_packaging.py"
-    - "tests/test_release_workflow.py"
-    - "tests/test_showroom.py"
-    - "tests/test_workload.py"
-    - "tests/validation_matrix.yaml"
-    - "tsconfig.app.json"
-    - "tsconfig.json"
-    - "tsconfig.node.json"
-    - "visual-tests/presentation.spec.ts"
-    - "vite.config.ts"
-    - "workload/Containerfile"
-    - "workload/__init__.py"
-    - "workload/app.py"
-    - "workload/vm_client.py"
-  discrepancies: []
+    - demo-blueprint.yaml
+    - contracts/openapi.yaml
+    - charts/virtualization-ai-foundations/templates/vm.yaml
+    - charts/virtualization-ai-foundations/templates/adapter.yaml
+    - charts/virtualization-ai-foundations/templates/networkpolicy.yaml
+    - workload/app.py
+    - workload/vm_client.py
+    - handoff/evidence/published-release.json
+  discrepancies:
+    - id: prerequisite-not-learner-work
+      status: verified
+      summary: The 101 repository proves a preconfigured trace; it does not require the learner to author or qualify the integration contract.
+      source: 101 blueprint and Showroom objectives
+    - id: live-platform-proof-pending
+      status: unknown
+      summary: No approved OpenShift cluster, OpenShift Virtualization release, or managed Intel Xeon model endpoint is attached to this factory build.
+      source: Factory environment inventory
+
 intent:
-  primary_user: unknown
-  workload: unknown
-  recognized_problem: unknown
-  audience_decision: unknown
-  desired_outcome: unknown
+  primary_user: Application and platform engineers who completed Virtualization + AI 101 or can already trace a VM-to-AI request.
+  workload: A learner-authored contract connects a KubeVirt VirtualMachine client through an OpenShift Service and validation adapter to a governed OpenAI-compatible model endpoint.
+  recognized_problem: A working curl command does not qualify an integration; teams must make schema, identity, credential, network, failure, authority, evidence, and cleanup decisions explicit.
+  audience_decision: Approve a level-201 construction lab that requires learners to author and qualify the VM-to-AI contract without granting the model operational authority.
+  desired_outcome: The learner leaves with a reviewable contract bundle, passing healthy and unavailable-path tests, correlated evidence, and a cleanup receipt.
+
 architecture:
-  actors: []
+  actors:
+    - id: learner
+      name: Learner engineer
+      kind: human
+      responsibility: Author the contract and platform resources, run qualification, inspect evidence, and own the final decision.
+      status: verified
+      source: 201 learner outcome
+    - id: reviewer
+      name: Human reviewer
+      kind: human
+      responsibility: Accept or reject the learner evidence bundle; no model can self-approve.
+      status: verified
+      source: Authority policy
   runtime_objects:
-    - id: route
-      name: "route"
-      kind: route
-      responsibility: unknown
-      status: discovered
-      source: "README.md"
-    - id: service
-      name: "service"
-      kind: service
-      responsibility: unknown
-      status: discovered
-      source: "charts/virtualization-ai-foundations/templates/adapter.yaml"
-    - id: deployment
-      name: "deployment"
-      kind: deployment
-      responsibility: unknown
-      status: discovered
-      source: "charts/virtualization-ai-foundations/templates/adapter.yaml"
+    - id: vm-client
+      name: Learner VM client
+      kind: kubevirt.io/v1 VirtualMachine workload
+      responsibility: Create the versioned request, guest identity, correlation identifier, and request hash inside the VM.
+      status: verified
+      source: Contracts and Helm reference implementation
+    - id: adapter-service
+      name: Qualification adapter Service
+      kind: v1 Service
+      responsibility: Provide stable namespace-local DNS and select the adapter pod.
+      status: verified
+      source: Helm reference implementation
+    - id: network-policy
+      name: VM-to-adapter NetworkPolicy
+      kind: networking.k8s.io/v1 NetworkPolicy
+      responsibility: Admit only the declared VM launcher and presentation paths to the adapter.
+      status: verified
+      source: Helm reference implementation
+    - id: adapter
+      name: Contract validation adapter
+      kind: apps/v1 Deployment
+      responsibility: Validate requests, isolate the model credential, invoke the configured endpoint, validate output, fail closed, and expose redacted evidence.
+      status: verified
+      source: Workload reference implementation
+    - id: runtime-secret
+      name: Model runtime Secret reference
+      kind: v1 Secret reference
+      responsibility: Supply endpoint, model, provider, hardware class, and API key at runtime without committing values or exposing them to the VM.
+      status: verified
+      source: Chart values and example manifest
     - id: model-endpoint
-      name: "model endpoint"
-      kind: model-endpoint
-      responsibility: unknown
-      status: discovered
-      source: "README.md"
-  boundaries: []
-  external_dependencies: []
-  flows: []
+      name: Governed model endpoint
+      kind: external OpenAI-compatible API
+      responsibility: Return a bounded advisory classification when LIVE configuration and identity are complete.
+      status: assumed
+      source: Deployment-time dependency; no live endpoint attached in factory
+    - id: evidence-api
+      name: Qualification evidence API
+      kind: HTTP API
+      responsibility: Return redacted request, routing, model, validation, authority, and failure evidence by correlation identifier.
+      status: verified
+      source: Workload reference implementation
+  boundaries:
+    - id: guest-boundary
+      name: Guest authoring boundary
+      kind: identity-and-compute
+      responsibility: Prove the client and request originated in the VM.
+      status: verified
+      source: VM client contract
+    - id: namespace-network
+      name: Namespace network boundary
+      kind: network
+      responsibility: Make the allowed Service path and denied paths reviewable.
+      status: verified
+      source: Service and NetworkPolicy contracts
+    - id: credential-boundary
+      name: Model credential boundary
+      kind: secret
+      responsibility: Keep credentials in the adapter runtime and out of VM, browser, fixtures, logs, and repository.
+      status: verified
+      source: Secret-reference policy
+    - id: human-authority
+      name: Human authority boundary
+      kind: authority
+      responsibility: Keep model output advisory and require human acceptance of the evidence bundle.
+      status: verified
+      source: Response and evidence contracts
+  external_dependencies:
+    - id: openshift-virtualization
+      name: Red Hat OpenShift Virtualization
+      kind: platform-operator
+      responsibility: Run the learner VM and expose guest-origin evidence.
+      status: assumed
+      source: Required target capability
+    - id: governed-model
+      name: Approved Intel Xeon CPU model service
+      kind: inference-service
+      responsibility: Provide model, provider, and hardware identity with the advisory output.
+      status: assumed
+      source: Required live dependency
+  flows:
+    - id: author-and-qualify
+      name: Learner-authored VM-to-AI contract
+      kind: request-and-evidence
+      trigger: The learner completes the schemas, VM client, Secret reference, Service, NetworkPolicy, and adapter configuration, then invokes the client from the VM.
+      outcome: A schema-valid advisory response and correlated evidence record are available for human review.
+      edges:
+        - from: learner
+          to: vm-client
+          purpose: Author and invoke the versioned client.
+          protocol: virtctl SSH or console
+          evidence_ids: [authoring-receipt, guest-request-receipt]
+        - from: vm-client
+          to: adapter-service
+          purpose: Submit the qualification request with guest and correlation identity.
+          protocol: HTTP JSON over namespace-local Service DNS
+          evidence_ids: [guest-request-receipt, network-qualification]
+        - from: adapter-service
+          to: adapter
+          purpose: Select the validation adapter through the declared network policy.
+          protocol: Kubernetes Service TCP/HTTP :8080
+          evidence_ids: [network-qualification]
+        - from: runtime-secret
+          to: adapter
+          purpose: Supply model configuration and credential by reference.
+          protocol: SecretKeyRef environment projection
+          evidence_ids: [secret-isolation]
+        - from: adapter
+          to: model-endpoint
+          purpose: Send the bounded note and schema instruction only after deterministic request validation.
+          protocol: OpenAI-compatible HTTPS JSON
+          evidence_ids: [model-invocation, output-validation]
+        - from: adapter
+          to: evidence-api
+          purpose: Store redacted correlated qualification evidence.
+          protocol: Internal application record
+          evidence_ids: [qualification-record]
+        - from: evidence-api
+          to: reviewer
+          purpose: Present the evidence and authority boundary for human acceptance.
+          protocol: HTTP JSON export
+          evidence_ids: [qualification-record, human-decision]
+    - id: fail-closed-model-unavailable
+      name: Model unavailable qualification
+      kind: failure
+      trigger: The learner selects the declared unavailable endpoint condition and repeats the same request.
+      outcome: The adapter returns a typed unavailable result with no category, summary, rationale, or claim of model participation.
+      edges:
+        - from: adapter
+          to: model-endpoint
+          purpose: Attempt the bounded request under the unavailable condition.
+          protocol: HTTPS with bounded timeout
+          evidence_ids: [unavailable-receipt]
+        - from: adapter
+          to: evidence-api
+          purpose: Preserve the failure class and correlation identifier without fabricating output.
+          protocol: Internal application record
+          evidence_ids: [unavailable-receipt]
+        - from: evidence-api
+          to: reviewer
+          purpose: Prove the failure path remains attributable and human-owned.
+          protocol: HTTP JSON export
+          evidence_ids: [unavailable-receipt, human-decision]
+
 operational_pattern:
-  name: unknown
-  rationale: Must be derived from domain workflows, contracts, and tests.
-  steps: []
-  changed_condition: null
-  close: null
-evidence: []
-decisions: []
+  name: Frame, author, wire, prove, break, reclaim
+  rationale: Level 201 is earned by constructing and qualifying the integration, not by retracing the prebuilt 101 path.
+  steps:
+    - id: frame
+      label: Frame the contract
+      question: What must the VM send, what may the model see, and what must the adapter return?
+      flow_ids: [author-and-qualify]
+      evidence_ids: [authoring-receipt]
+    - id: author
+      label: Author the client and schemas
+      question: Can incompatible, incomplete, or secret-bearing requests be rejected before inference?
+      flow_ids: [author-and-qualify]
+      evidence_ids: [authoring-receipt, secret-isolation]
+    - id: wire
+      label: Wire the platform boundary
+      question: Can the VM reach only the intended Service while the credential remains adapter-side?
+      flow_ids: [author-and-qualify]
+      evidence_ids: [network-qualification, secret-isolation]
+    - id: prove
+      label: Prove the healthy path
+      question: Does one correlated request produce a validated advisory record with explicit source state and human authority?
+      flow_ids: [author-and-qualify]
+      evidence_ids: [guest-request-receipt, model-invocation, output-validation, qualification-record]
+    - id: break
+      label: Qualify failure
+      question: Does model unavailability return no invented advisory answer through the same contract?
+      flow_ids: [fail-closed-model-unavailable]
+      evidence_ids: [unavailable-receipt]
+    - id: reclaim
+      label: Reclaim and review
+      question: Can the learner remove the namespace resources and submit one reviewable evidence map?
+      flow_ids: [author-and-qualify, fail-closed-model-unavailable]
+      evidence_ids: [cleanup-receipt, human-decision]
+  changed_condition: The same correlation-aware contract changes from a healthy endpoint to a declared unavailable endpoint; only model participation and outcome may change.
+  close: The human reviewer accepts or rejects the learner-authored bundle and records limits; the model receives no action or approval authority.
+
+evidence:
+  - id: authoring-receipt
+    name: Contract authoring receipt
+    source: Learner working tree and contract tests
+    collection: Schema, client, adapter integration, and manifest checks
+    supports: The learner constructed rather than merely invoked the integration.
+    status: verified
+  - id: guest-request-receipt
+    name: Guest-origin request receipt
+    source: VM client
+    collection: Correlation ID, guest identity, request hash, contract version, and timestamp
+    supports: The request originated inside the declared VM client.
+    status: verified
+  - id: network-qualification
+    name: Network qualification receipt
+    source: Service, EndpointSlice, NetworkPolicy, and request evidence
+    collection: Allowed path result plus denied or unavailable path result
+    supports: The learner qualified the intended network boundary.
+    status: verified
+  - id: secret-isolation
+    name: Secret isolation receipt
+    source: Source scan and rendered manifests
+    collection: Secret reference exists; no credential value appears in VM, source, fixture, or public configuration
+    supports: The credential boundary is explicit and reviewable.
+    status: verified
+  - id: model-invocation
+    name: Model invocation receipt
+    source: Adapter response
+    collection: Model, provider, hardware class, source state, and correlation ID
+    supports: A named model participated only when LIVE identity is complete.
+    status: verified
+  - id: output-validation
+    name: Deterministic output validation
+    source: Adapter
+    collection: Schema and allowed-category result
+    supports: Model output met the authored acceptance contract.
+    status: verified
+  - id: qualification-record
+    name: Correlated evidence export
+    source: Evidence API
+    collection: Redacted request, path, source state, validation, and authority record
+    supports: The healthy path is attributable without exposing secret values.
+    status: verified
+  - id: unavailable-receipt
+    name: Fail-closed unavailable record
+    source: Adapter
+    collection: Typed failure, correlation ID, explicit no-model-participation state, and absent advisory fields
+    supports: Model unavailability cannot be presented as a live AI answer.
+    status: verified
+  - id: cleanup-receipt
+    name: Reclaim receipt
+    source: Learner namespace inspection
+    collection: Before/after resource inventory and zero matching workload objects
+    supports: The learner performed cleanup; factory evidence does not substitute for Launchpad reclaim certification.
+    status: assumed
+  - id: human-decision
+    name: Human qualification decision
+    source: Learner worksheet
+    collection: Evidence-to-claim mapping, limitations, and accept or reject decision
+    supports: Authority remains with the named reviewer.
+    status: verified
+
+decisions:
+  - id: prerequisite
+    owner: Lab factory reviewer
+    policy: Require 101 trace literacy or equivalent before 201; do not copy 101 completion artifacts as learner work.
+    fail_closed_behavior: Keep the learner in the prerequisite path until they can explain the existing boundaries.
+    status: verified
+  - id: contract-acceptance
+    owner: Human reviewer
+    policy: Accept only when schemas, client, Secret reference, Service, NetworkPolicy, healthy path, unavailable path, evidence, and cleanup checks pass.
+    fail_closed_behavior: Any missing evidence leaves the bundle unqualified.
+    status: verified
+  - id: advisory-authority
+    owner: Application operator
+    policy: Model output is advisory; no response field or runtime identity grants action authority.
+    fail_closed_behavior: Missing identity, invalid output, timeout, or unavailable endpoint produces no advisory content and no live claim.
+    status: verified
+
 ai_assessment:
-  needed: unknown
-  kind: agentic
-  rationale: "AI signals were discovered; runtime necessity and authority require verification."
-  tasks: []
-  inputs: []
-  outputs: []
-  model_identity_source: "README.md"
-  hardware_identity_source: null
-  evidence_access: []
-  action_authority: unknown
-  validation: []
-  fallback: unknown
-  final_decision_owner: unknown
+  needed: true
+  kind: generative-llm
+  rationale: AI is used only to interpret the bounded synthetic note; platform routing, validation, evidence, authority, and cleanup are deterministic learner work.
+  tasks:
+    - Classify one bounded synthetic operations note into an allowed category.
+    - Produce a concise summary and rationale grounded only in that note.
+  inputs:
+    - Contract version and correlation identifier
+    - Synthetic operations note
+    - Allowed category enumeration
+    - System instruction requiring JSON-only advisory output
+  outputs:
+    - category
+    - summary
+    - rationale
+    - model identity
+    - source state
+    - validation state
+  model_identity_source: Configured endpoint response plus runtime model configuration
+  hardware_identity_source: Runtime Secret metadata supplied by the approved environment; factory fixtures say REHEARSAL
+  evidence_access:
+    - Submitted synthetic note
+    - Contract instruction
+    - Allowed category enumeration
+  action_authority: none; the model cannot call tools, mutate the VM or cluster, qualify itself, or approve the learner bundle
+  validation:
+    - Request and response satisfy versioned JSON Schemas.
+    - Category is in the deterministic allowed set.
+    - Correlation identifier is preserved end to end.
+    - LIVE requires non-placeholder model, provider, and Intel Xeon CPU hardware identity.
+    - Unavailable paths contain no advisory fields.
+  fallback: REHEARSAL uses checked-in representative records; OFFLINE reports absence. Neither is live inference evidence.
+  final_decision_owner: Named human reviewer
+
 story_mapping:
-  audience_question: unknown
-  stakes: []
-  architecture_flow_ids: []
-  live_proof_flow_ids: []
-  comparison: null
-  payoff: unknown
-  next_journey: unknown
+  audience_question: Can a learner turn an existing VM-to-AI trace into a contract they can defend, break safely, and hand to a reviewer?
+  stakes:
+    - Connectivity without a versioned contract hides incompatible assumptions.
+    - A credential in the guest expands exposure and weakens ownership.
+    - A happy-path-only demo cannot qualify failure behavior.
+  architecture_flow_ids: [author-and-qualify, fail-closed-model-unavailable]
+  live_proof_flow_ids: [author-and-qualify, fail-closed-model-unavailable]
+  comparison: Complete healthy qualification versus explicit model-unavailable fail-closed evidence.
+  payoff: The learner produces the contract and evidence bundle; the platform and model do not confer certification or decision authority.
+  next_journey: Independent Launchpad development-cluster qualification, capacity measurement, reclaim proof, certification, and promotion.

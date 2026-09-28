@@ -1,0 +1,66 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://virtualization-ai.redhat-intel.com/contracts/qualification-response.schema.json",
+  "title": "Virtualization AI 201 qualification response",
+  "oneOf": [
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schema_version", "correlation_id", "outcome", "source_state", "ai_participated", "advisory", "model", "validation", "authority", "evidence_id"],
+      "properties": {
+        "schema_version": {"const": "virtualization-ai.redhat-intel.com/qualification-response/v1"},
+        "correlation_id": {"type": "string", "format": "uuid"},
+        "outcome": {"const": "QUALIFIED"},
+        "source_state": {"enum": ["LIVE", "REHEARSAL"]},
+        "ai_participated": {"type": "boolean"},
+        "advisory": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["category", "summary", "rationale"],
+          "properties": {
+            "category": {"enum": ["application", "capacity", "connectivity", "unknown"]},
+            "summary": {"type": "string", "minLength": 1, "maxLength": 400},
+            "rationale": {"type": "string", "minLength": 1, "maxLength": 600}
+          }
+        },
+        "model": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["id", "provider", "hardware"],
+          "properties": {
+            "id": {"type": "string", "minLength": 1},
+            "provider": {"type": "string", "minLength": 1},
+            "hardware": {"type": "string", "minLength": 1}
+          }
+        },
+        "validation": {"const": "PASS"},
+        "authority": {"const": "HUMAN_REVIEW_REQUIRED"},
+        "evidence_id": {"type": "string", "format": "uuid"}
+      }
+    },
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schema_version", "correlation_id", "outcome", "source_state", "ai_participated", "failure", "validation", "authority", "evidence_id"],
+      "properties": {
+        "schema_version": {"const": "virtualization-ai.redhat-intel.com/qualification-response/v1"},
+        "correlation_id": {"type": "string", "format": "uuid"},
+        "outcome": {"const": "MODEL_UNAVAILABLE"},
+        "source_state": {"enum": ["LIVE", "REHEARSAL", "OFFLINE"]},
+        "ai_participated": {"const": false},
+        "failure": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["class", "message"],
+          "properties": {
+            "class": {"enum": ["connection", "timeout", "identity", "invalid-output", "offline"]},
+            "message": {"type": "string", "minLength": 1, "maxLength": 240}
+          }
+        },
+        "validation": {"const": "FAIL_CLOSED"},
+        "authority": {"const": "HUMAN_REVIEW_REQUIRED"},
+        "evidence_id": {"type": "string", "format": "uuid"}
+      }
+    }
+  ]
+}

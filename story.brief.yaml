@@ -1,52 +1,92 @@
 version: 1
 blueprint: demo-blueprint.yaml
 presentation:
-  title: "Build and Qualify a VM-to-AI Contract"
-  audience: Technical and business decision makers
-  desired_decision: Approve a measured Red Hat and Intel proof of value
+  title: Build and Qualify a VM-to-AI Contract
+  audience: Application and platform engineers who can already trace the 101 path
+  desired_decision: Approve a construction lab where learners author and defend the integration contract
   duration_minutes: 7
-  core_tension: AI ambition is moving faster than operational confidence
-  cta: Choose one workload and prove it on the target platform
+  core_tension: A reachable model endpoint is not yet a qualified application boundary
+  cta: Close the presentation and build the contract in the separate Showroom lab
 
 source_material:
-  mode: repository
+  mode: repository-prerequisite
   items:
-    - "/Users/jkershaw/Documents/virtualization-ai-foundations"
+    - https://github.com/jkershawrh/virtualization-ai-foundations@d84eabdd709f573caaf781763b361018e9ec04a6
     - demo-blueprint.yaml
   consequential_assumptions:
-    - Discovery candidates remain unverified until reviewed against source artifacts and live behavior.
+    - The target Launchpad environment will provide a supported OpenShift Virtualization release and approved model endpoint.
+    - Factory proof uses labeled REHEARSAL evidence until a live environment is attached.
+    - The 101 evidence establishes prerequisite literacy only and is not accepted as 201 learner work.
 
 architecture:
-  actors: []
-  boundaries: []
-  critical_flows: []
-  omitted_from_main_story: []
+  actors: [learner, reviewer]
+  boundaries: [guest-boundary, namespace-network, credential-boundary, human-authority]
+  critical_flows: [author-and-qualify, fail-closed-model-unavailable]
+  omitted_from_main_story:
+    - Unrelated 101 presentation assets and completion receipts
+    - Performance, capacity, cost, and certification claims
+    - Model serving implementation details outside the authored contract
 
 beats:
   - beat: ordinary-world
-    claim: Teams can prototype AI faster than they can operationalize it.
+    claim: The learner can trace the 101 path, but the integration decisions are hidden inside a prebuilt solution.
   - beat: stakes
-    claim: Unmeasured assumptions create cost and delivery risk.
+    claim: A request that merely reaches a model does not prove compatibility, credential isolation, safe failure, or authority.
+  - beat: reframe
+    claim: The deliverable is not a successful prompt; it is a qualified contract bundle.
   - beat: system-reveal
-    claim: A right-sized platform makes the decision observable.
+    claim: The learner authors each boundary from VM request through human review.
   - beat: live-proof
-    claim: The configured workload can produce a measured result.
+    claim: Healthy and unavailable conditions travel through the same contract and retain distinct source state.
   - beat: transformation
-    claim: The audience can decide from evidence instead of architecture promises.
+    claim: The learner can defend what was built, what failed closed, and what remains unproven.
+  - beat: next-journey
+    claim: Launchpad must independently qualify the live cluster, capacity, reclaim, artifacts, and certification.
 
 evidence:
-  - id: example-proof
-    claim: The demonstration returns a measured result.
+  - id: prerequisite-boundary
+    claim: 101 completion is a prerequisite, not 201 construction evidence.
+    classification: verified-fact
+    source: demo-blueprint.yaml
+    owner: Lab factory reviewer
+    last_verified: "2026-09-28"
+    treatment: State before the architecture reveal.
+  - id: healthy-qualification
+    claim: A schema-valid request can return a correlated advisory result with explicit source state and human authority.
     classification: rehearsal-fixture
-    source: public/fixtures/demo-proof.json
-    owner: Demo author
+    source: public/fixtures/qualified.json
+    owner: Workload contract
+    last_verified: "2026-09-28"
+    treatment: Always label REHEARSAL unless the live adapter succeeds.
+  - id: unavailable-qualification
+    claim: Model unavailability produces no fabricated advisory fields.
+    classification: rehearsal-fixture
+    source: public/fixtures/unavailable.json
+    owner: Workload contract
+    last_verified: "2026-09-28"
+    treatment: Preserve beside the healthy result for comparison.
+  - id: live-platform
+    claim: The complete path runs from an approved VM on a supported OpenShift release to a managed Intel Xeon model endpoint.
+    classification: future-state
+    source: No development-cluster receipt attached
+    owner: Launchpad qualification
     last_verified: null
-    treatment: Show with a REHEARSAL badge until the live endpoint succeeds.
+    treatment: Never imply live execution in factory mode.
 
-live_systems: []
+live_systems:
+  - id: qualification-adapter
+    endpoint: /api/v1/qualify
+    source_states: [LIVE, REHEARSAL, OFFLINE]
+    timeout_ms: 3000
+    fallback: public/fixtures/qualified.json
+
 journey:
-  presentation: 5–7 minute decision story with no more than seven scenes
-  live_demonstration: 5–10 minute proof in the operator or system workspace
-  guided_demo: 20–35 minute instructor-led architecture and evidence trace
-  hands_on_lab: 60–90 minute build, failure, qualification, and takeaway artifact
-open_questions: []
+  presentation: 5–7 minute contract decision story with seven top-level scenes
+  live_demonstration: Compare healthy and model-unavailable qualification through the same adapter path
+  guided_demo: Inspect the schema, client, Secret reference, Service, NetworkPolicy, adapter evidence, and authority
+  hands_on_lab: 75–90 minutes to author, test, break, qualify, export, and reclaim the contract bundle
+
+open_questions:
+  - Which OpenShift and OpenShift Virtualization releases will Launchpad certify?
+  - Which approved model endpoint and runtime identity convention will be supplied?
+  - Which registry, retention, rollback, and capacity policies will Launchpad approve?
