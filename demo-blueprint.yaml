@@ -1,0 +1,180 @@
+version: 1
+status: draft
+source:
+  name: "virtualization-ai-foundations"
+  kind: repository
+  location: "/Users/jkershaw/Documents/virtualization-ai-foundations"
+  revision: "d84eabd"
+  discovered_at: "2026-09-28T19:53:35.880Z"
+  inspected_artifacts:
+    - ".github/workflows/release-images.yml"
+    - "Containerfile"
+    - "README.md"
+    - "artifacts/README.md"
+    - "artifacts/adapter-sbom.cdx.json"
+    - "artifacts/adapter-trivy.json"
+    - "artifacts/presentation-sbom.cdx.json"
+    - "artifacts/presentation-trivy.json"
+    - "charts/virtualization-ai-foundations/Chart.yaml"
+    - "charts/virtualization-ai-foundations/files/vm_client.py"
+    - "charts/virtualization-ai-foundations/templates/adapter.yaml"
+    - "charts/virtualization-ai-foundations/templates/networkpolicy.yaml"
+    - "charts/virtualization-ai-foundations/templates/presentation.yaml"
+    - "charts/virtualization-ai-foundations/templates/serviceaccount.yaml"
+    - "charts/virtualization-ai-foundations/templates/vm.yaml"
+    - "charts/virtualization-ai-foundations/values.candidate.yaml"
+    - "charts/virtualization-ai-foundations/values.published.yaml"
+    - "charts/virtualization-ai-foundations/values.yaml"
+    - "contracts/analysis-request.schema.json"
+    - "contracts/analysis-response.schema.json"
+    - "contracts/evidence-record.schema.json"
+    - "contracts/examples/healthy-request.json"
+    - "contracts/examples/healthy-response.json"
+    - "contracts/examples/unavailable-response.json"
+    - "contracts/openapi.yaml"
+    - "demo-blueprint.yaml"
+    - "deploy/secret.example.yaml"
+    - "discovery-review.md"
+    - "docs/immutable-release.md"
+    - "docs/implementation-recommendation.md"
+    - "docs/journey-acceptance-matrix.md"
+    - "docs/packaging-evidence.md"
+    - "docs/rehearsal-checklist.md"
+    - "docs/source-discrepancies.md"
+    - "handoff/catalog-certification.proposed.yaml"
+    - "handoff/catalog-onboarding.proposed.yaml"
+    - "handoff/evidence/factory-development-journey.json"
+    - "handoff/evidence/factory-zero-residue.json"
+    - "handoff/evidence/presentation-artifact-release.json"
+    - "handoff/evidence/presentation-verification.json"
+    - "handoff/evidence/published-adapter-release.json"
+    - "handoff/evidence/published-presentation-release.json"
+    - "handoff/evidence/published-release.json"
+    - "handoff/evidence/workload-artifact-release.json"
+    - "handoff/launchpad-handoff.yaml"
+    - "package-lock.json"
+    - "package.json"
+    - "playwright.config.ts"
+    - "showroom/content/antora.yml"
+    - "showroom/content/modules/ROOT/nav.adoc"
+    - "showroom/content/modules/ROOT/pages/01-verify.adoc"
+    - "showroom/content/modules/ROOT/pages/02-trace.adoc"
+    - "showroom/content/modules/ROOT/pages/03-invoke.adoc"
+    - "showroom/content/modules/ROOT/pages/04-inspect.adoc"
+    - "showroom/content/modules/ROOT/pages/05-failure.adoc"
+    - "showroom/content/modules/ROOT/pages/06-evidence.adoc"
+    - "showroom/content/modules/ROOT/pages/99-conclusion.adoc"
+    - "showroom/content/modules/ROOT/pages/index.adoc"
+    - "showroom/default-site.yml"
+    - "src/App.test.tsx"
+    - "src/App.tsx"
+    - "src/components/BrandLockup.tsx"
+    - "src/components/DemoHeader.tsx"
+    - "src/components/Finale.tsx"
+    - "src/components/Opening.tsx"
+    - "src/config/validate.test.ts"
+    - "src/config/validate.ts"
+    - "src/demo.config.ts"
+    - "src/live/adapters.ts"
+    - "src/live/demoAdapter.ts"
+    - "src/live/fixtures/healthy.json"
+    - "src/live/fixtures/unavailable.json"
+    - "src/live/proof.test.ts"
+    - "src/live/proof.ts"
+    - "src/live/useLiveProof.ts"
+    - "src/main.tsx"
+    - "src/scenes/LiveJourney.tsx"
+    - "src/scenes/LiveProof.tsx"
+    - "src/scenes/SceneFrame.tsx"
+    - "src/scenes/SceneRenderer.test.tsx"
+    - "src/scenes/SceneRenderer.tsx"
+    - "src/scenes/TechnicalTopology.tsx"
+    - "src/test/setup.ts"
+    - "src/types.ts"
+    - "src/vite-env.d.ts"
+    - "story.brief.yaml"
+    - "test-results/.last-run.json"
+    - "tests/benchmark_rubric.yaml"
+    - "tests/claim_registry.yaml"
+    - "tests/test_contracts.py"
+    - "tests/test_packaging.py"
+    - "tests/test_release_workflow.py"
+    - "tests/test_showroom.py"
+    - "tests/test_workload.py"
+    - "tests/validation_matrix.yaml"
+    - "tsconfig.app.json"
+    - "tsconfig.json"
+    - "tsconfig.node.json"
+    - "visual-tests/presentation.spec.ts"
+    - "vite.config.ts"
+    - "workload/Containerfile"
+    - "workload/__init__.py"
+    - "workload/app.py"
+    - "workload/vm_client.py"
+  discrepancies: []
+intent:
+  primary_user: unknown
+  workload: unknown
+  recognized_problem: unknown
+  audience_decision: unknown
+  desired_outcome: unknown
+architecture:
+  actors: []
+  runtime_objects:
+    - id: route
+      name: "route"
+      kind: route
+      responsibility: unknown
+      status: discovered
+      source: "README.md"
+    - id: service
+      name: "service"
+      kind: service
+      responsibility: unknown
+      status: discovered
+      source: "charts/virtualization-ai-foundations/templates/adapter.yaml"
+    - id: deployment
+      name: "deployment"
+      kind: deployment
+      responsibility: unknown
+      status: discovered
+      source: "charts/virtualization-ai-foundations/templates/adapter.yaml"
+    - id: model-endpoint
+      name: "model endpoint"
+      kind: model-endpoint
+      responsibility: unknown
+      status: discovered
+      source: "README.md"
+  boundaries: []
+  external_dependencies: []
+  flows: []
+operational_pattern:
+  name: unknown
+  rationale: Must be derived from domain workflows, contracts, and tests.
+  steps: []
+  changed_condition: null
+  close: null
+evidence: []
+decisions: []
+ai_assessment:
+  needed: unknown
+  kind: agentic
+  rationale: "AI signals were discovered; runtime necessity and authority require verification."
+  tasks: []
+  inputs: []
+  outputs: []
+  model_identity_source: "README.md"
+  hardware_identity_source: null
+  evidence_access: []
+  action_authority: unknown
+  validation: []
+  fallback: unknown
+  final_decision_owner: unknown
+story_mapping:
+  audience_question: unknown
+  stakes: []
+  architecture_flow_ids: []
+  live_proof_flow_ids: []
+  comparison: null
+  payoff: unknown
+  next_journey: unknown
