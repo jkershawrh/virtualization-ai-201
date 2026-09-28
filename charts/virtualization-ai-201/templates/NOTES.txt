@@ -1,0 +1,6 @@
+The default mode is REHEARSAL and requires no Secret.
+For LIVE mode, create the Secret outside source control and set:
+  adapter.mode=live
+  adapter.model.secretName=<runtime-secret-name>
+  adapter.model.egressCIDR=<approved-endpoint-cidr>
+No model credential is projected into the VirtualMachine.

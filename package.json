@@ -7,9 +7,12 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "test": "vitest run",
+    "test:factory": "python3 -m unittest discover -s tests -v",
+    "lint:helm": "helm lint charts/virtualization-ai-201 && helm template virtualization-ai-201 charts/virtualization-ai-201 >/dev/null",
+    "validate:blueprint": "node scripts/validate-blueprint.mjs demo-blueprint.yaml",
     "test:visual": "playwright test",
     "verify:offline": "node scripts/verify-offline.mjs",
-    "check": "npm run test && npm run build && npm run verify:offline",
+    "check": "npm run validate:blueprint && npm run test:factory && npm run lint:helm && npm run test && npm run build && npm run verify:offline",
     "preview": "vite preview"
   },
   "dependencies": {

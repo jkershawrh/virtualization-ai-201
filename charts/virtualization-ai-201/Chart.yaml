@@ -1,0 +1,6 @@
+apiVersion: v2
+name: virtualization-ai-201
+description: Reference runtime for authoring and qualifying a VM-to-AI contract
+type: application
+version: 0.1.0
+appVersion: "0.1.0"

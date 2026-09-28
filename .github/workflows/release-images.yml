@@ -1,0 +1,200 @@
+name: Virtualization + AI 201 immutable images
+
+on:
+  workflow_dispatch:
+    inputs:
+      expected_sha:
+        description: Exact 40-character source revision to build
+        required: true
+        type: string
+      publish:
+        description: Publish, sign, and attest after every gate passes
+        required: true
+        default: false
+        type: boolean
+
+permissions:
+  contents: read
+  packages: write
+  id-token: write
+  attestations: write
+
+concurrency:
+  group: virtualization-ai-201-release-${{ inputs.expected_sha }}
+  cancel-in-progress: false
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ inputs.expected_sha }}
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: 22
+          cache: npm
+      - name: Refuse malformed input or revision drift
+        env:
+          EXPECTED_SHA: ${{ inputs.expected_sha }}
+          DISPATCH_SHA: ${{ github.sha }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          [[ "$EXPECTED_SHA" =~ ^[0-9a-f]{40}$ ]]
+          test "$DISPATCH_SHA" = "$EXPECTED_SHA"
+          test "$(git rev-parse HEAD)" = "$EXPECTED_SHA"
+          test -z "$(git status --porcelain)"
+      - name: Install locked test dependencies
+        run: |
+          npm ci --ignore-scripts
+          python3 -m pip install --requirement requirements-test.txt
+      - name: Run contract, workload, presentation, and chart gates
+        run: npm run check
+
+  release:
+    needs: validate
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - component: presentation
+            containerfile: Containerfile
+            repository: ghcr.io/${{ github.repository_owner }}/virtualization-ai-201-presentation
+          - component: adapter
+            containerfile: workload/Containerfile
+            repository: ghcr.io/${{ github.repository_owner }}/virtualization-ai-201-adapter
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ inputs.expected_sha }}
+      - name: Refuse malformed input or revision drift
+        env:
+          EXPECTED_SHA: ${{ inputs.expected_sha }}
+          DISPATCH_SHA: ${{ github.sha }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          [[ "$EXPECTED_SHA" =~ ^[0-9a-f]{40}$ ]]
+          test "$DISPATCH_SHA" = "$EXPECTED_SHA"
+          test "$(git rev-parse HEAD)" = "$EXPECTED_SHA"
+          test -z "$(git status --porcelain)"
+      - uses: docker/setup-qemu-action@c7c53464625b32c7a7e944ae62b3e17d2b600130
+      - uses: docker/setup-buildx-action@8d2750c68a42422c14e847fe6c8ac0403b4cbd6f
+      - name: Build exact Linux AMD64 candidate
+        uses: docker/build-push-action@10e90e3645eae34f1e60eeb005ba3a3d33f178e8
+        with:
+          context: .
+          file: ${{ matrix.containerfile }}
+          platforms: linux/amd64
+          load: true
+          push: false
+          no-cache: true
+          tags: ${{ matrix.repository }}:git-${{ inputs.expected_sha }}
+          build-args: |
+            SOURCE_REVISION=${{ inputs.expected_sha }}
+          labels: |
+            org.opencontainers.image.source=${{ github.server_url }}/${{ github.repository }}
+            org.opencontainers.image.revision=${{ inputs.expected_sha }}
+      - name: Inventory every detected vulnerability
+        uses: anchore/scan-action@1638637db639e0ade3258b51db49a9a137574c3e
+        with:
+          image: ${{ matrix.repository }}:git-${{ inputs.expected_sha }}
+          fail-build: false
+          output-format: json
+          output-file: vulnerability-full-${{ matrix.component }}.json
+      - name: Block every high or critical vulnerability
+        uses: anchore/scan-action@1638637db639e0ade3258b51db49a9a137574c3e
+        with:
+          image: ${{ matrix.repository }}:git-${{ inputs.expected_sha }}
+          fail-build: true
+          severity-cutoff: high
+          output-format: json
+          output-file: vulnerability-gate-${{ matrix.component }}.json
+      - name: Generate SPDX SBOM
+        uses: anchore/sbom-action@e22c389904149dbc22b58101806040fa8d37a610
+        with:
+          image: ${{ matrix.repository }}:git-${{ inputs.expected_sha }}
+          format: spdx-json
+          output-file: sbom-${{ matrix.component }}.spdx.json
+          upload-artifact: false
+      - name: Retain pre-publication evidence
+        if: ${{ always() }}
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: virtualization-ai-201-${{ matrix.component }}-${{ inputs.expected_sha }}
+          retention-days: 90
+          path: |
+            vulnerability-full-${{ matrix.component }}.json
+            vulnerability-gate-${{ matrix.component }}.json
+            sbom-${{ matrix.component }}.spdx.json
+      - name: Log in to GHCR
+        if: ${{ inputs.publish }}
+        uses: docker/login-action@c94ce9fb468520275223c153574b00df6fe4bcc9
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Publish immutable candidate and verify exact-digest pull
+        if: ${{ inputs.publish }}
+        id: publish
+        env:
+          EXPECTED_SHA: ${{ inputs.expected_sha }}
+          IMAGE: ${{ matrix.repository }}:git-${{ inputs.expected_sha }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          docker push "$IMAGE"
+          digest_ref="$(docker inspect --format='{{index .RepoDigests 0}}' "$IMAGE")"
+          test -n "$digest_ref"
+          digest="${digest_ref##*@}"
+          docker image rm "$IMAGE"
+          docker pull "$digest_ref"
+          test "$(docker inspect --format='{{.Architecture}}' "$digest_ref")" = amd64
+          test "$(docker inspect --format='{{index .Config.Labels "org.opencontainers.image.revision"}}' "$digest_ref")" = "$EXPECTED_SHA"
+          printf 'digest_ref=%s\n' "$digest_ref" >> "$GITHUB_OUTPUT"
+          printf 'digest=%s\n' "$digest" >> "$GITHUB_OUTPUT"
+          printf '%s\n' "$digest_ref" > image-${{ matrix.component }}.txt
+      - name: Install Cosign
+        if: ${{ inputs.publish }}
+        uses: sigstore/cosign-installer@398d4b0eeef1380460a10c8013a76f728fb906ac
+      - name: Sign and attest exact digest with GitHub OIDC
+        if: ${{ inputs.publish }}
+        env:
+          DIGEST_REF: ${{ steps.publish.outputs.digest_ref }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          jq -n --arg repository "${{ github.server_url }}/${{ github.repository }}" \
+            --arg revision "${{ inputs.expected_sha }}" --arg image "$DIGEST_REF" \
+            --arg workflow "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}" \
+            '{source_repository:$repository,source_revision:$revision,subject_image:$image,workflow_run:$workflow,build_platform:"linux/amd64"}' \
+            > provenance-${{ matrix.component }}.json
+          cosign sign --yes "$DIGEST_REF"
+          cosign attest --yes --type spdxjson --predicate sbom-${{ matrix.component }}.spdx.json "$DIGEST_REF"
+          cosign attest --yes --type custom --predicate provenance-${{ matrix.component }}.json "$DIGEST_REF"
+      - name: Verify workflow signer and both attestations
+        if: ${{ inputs.publish }}
+        env:
+          DIGEST_REF: ${{ steps.publish.outputs.digest_ref }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          identity="${{ github.server_url }}/${{ github.repository }}/.github/workflows/release-images.yml@refs/heads/main"
+          issuer="https://token.actions.githubusercontent.com"
+          cosign verify --certificate-identity="$identity" --certificate-oidc-issuer="$issuer" "$DIGEST_REF" > signature-verification-${{ matrix.component }}.json
+          cosign verify-attestation --type spdxjson --certificate-identity="$identity" --certificate-oidc-issuer="$issuer" "$DIGEST_REF" > sbom-attestation-verification-${{ matrix.component }}.json
+          cosign verify-attestation --type custom --certificate-identity="$identity" --certificate-oidc-issuer="$issuer" "$DIGEST_REF" > provenance-attestation-verification-${{ matrix.component }}.json
+      - name: Retain published digest and verification evidence
+        if: ${{ inputs.publish }}
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: virtualization-ai-201-published-${{ matrix.component }}-${{ inputs.expected_sha }}
+          retention-days: 90
+          path: |
+            image-${{ matrix.component }}.txt
+            provenance-${{ matrix.component }}.json
+            signature-verification-${{ matrix.component }}.json
+            sbom-attestation-verification-${{ matrix.component }}.json
+            provenance-attestation-verification-${{ matrix.component }}.json

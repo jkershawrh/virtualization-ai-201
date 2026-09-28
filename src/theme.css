@@ -333,3 +333,25 @@ blockquote { font: 500 clamp(1.8rem, 4vw, 3.3rem)/1.28 'Red Hat Display'; margin
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; scroll-behavior: auto !important; }
 }
+.journey-history {
+  display: flex;
+  gap: 10px;
+  margin: 10px 0;
+}
+
+.journey-history-item {
+  display: grid;
+  grid-template-columns: minmax(150px, 1fr) auto auto;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 9px 12px;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-left: 3px solid #00aeef;
+  background: rgba(255, 255, 255, 0.035);
+}
+
+.journey-history-item span,
+.journey-history-item small {
+  color: var(--muted);
+}

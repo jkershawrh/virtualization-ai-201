@@ -15,7 +15,7 @@ describe('presentation controls', () => {
   it('supports deep links', () => {
     window.history.replaceState(null, '', '/?act=1&scene=0')
     render(<App />)
-    expect(screen.getByText('Reveal only what the audience needs to believe')).toBeInTheDocument()
+    expect(screen.getByText('Each artifact answers one qualification question')).toBeInTheDocument()
   })
 
   it('restarts from the brand control', () => {
@@ -37,6 +37,6 @@ describe('presentation controls', () => {
     window.history.replaceState(null, '', '/?act=0&scene=0')
     render(<App />)
     fireEvent.click(screen.getByRole('button', { name: 'Toggle presenter prompt' }))
-    expect(screen.getByText(/Start with the audience reality/)).toBeInTheDocument()
+    expect(screen.getByText(/State the prerequisite plainly/)).toBeInTheDocument()
   })
 })

@@ -3,6 +3,7 @@ import unittest
 from pathlib import Path
 
 from jsonschema import Draft202012Validator, FormatChecker
+import yaml
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -37,6 +38,12 @@ class ContractTests(unittest.TestCase):
         lowered = json.dumps(request).lower()
         for forbidden in ("password", "api_key", "token", "secret"):
             self.assertNotIn(forbidden, lowered)
+
+    def test_openapi_exposes_only_versioned_qualification_paths(self):
+        openapi = yaml.safe_load((CONTRACTS / "openapi.yaml").read_text())
+        self.assertEqual(openapi["openapi"], "3.1.0")
+        self.assertIn("/api/v1/qualify", openapi["paths"])
+        self.assertIn("/api/v1/evidence/{evidence_id}", openapi["paths"])
 
 
 class ContractDrivenDevelopmentRedTests(unittest.TestCase):

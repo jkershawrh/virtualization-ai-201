@@ -1,0 +1,45 @@
+openapi: 3.1.0
+info:
+  title: Virtualization + AI 201 qualification adapter
+  version: 1.0.0
+paths:
+  /healthz:
+    get:
+      summary: Report adapter mode and live-identity completeness without exposing values
+      responses:
+        "200": {description: Adapter health}
+  /api/v1/qualify:
+    post:
+      summary: Validate and qualify one VM-origin contract request
+      parameters:
+        - in: header
+          name: X-Qualification-Condition
+          required: false
+          schema: {type: string, enum: [healthy, unavailable]}
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: {$ref: ./qualification-request.schema.json}
+      responses:
+        "200":
+          description: Qualified or fail-closed unavailable result
+          content:
+            application/json:
+              schema: {$ref: ./qualification-response.schema.json}
+        "400": {description: Request rejected before inference}
+  /api/v1/evidence/{evidence_id}:
+    get:
+      summary: Return a redacted correlated qualification record
+      parameters:
+        - in: path
+          name: evidence_id
+          required: true
+          schema: {type: string, format: uuid}
+      responses:
+        "200":
+          description: Redacted evidence record
+          content:
+            application/json:
+              schema: {$ref: ./evidence-record.schema.json}
+        "404": {description: Evidence not found}

@@ -16,7 +16,7 @@ describe('SceneRenderer', () => {
   }
 
   it('labels rehearsal data instead of presenting it as live', async () => {
-    const scene: SceneConfig = { id: 'fallback', type: 'live-proof', beat: 'live-proof', title: 'Proof', adapterId: 'demo-proof', cta: 'Run live proof', resultFields: [{ key: 'outcome', label: 'Outcome' }] }
+    const scene: SceneConfig = { id: 'fallback', type: 'live-proof', beat: 'live-proof', title: 'Proof', adapterId: 'qualification-healthy', cta: 'Run live proof', resultFields: [{ key: 'outcome', label: 'Outcome' }] }
     render(<SceneRenderer scene={scene} brand={demoConfig.brand} />)
     fireEvent.click(screen.getByRole('button', { name: /run live proof/i }))
     expect(await screen.findByText('rehearsal')).toBeInTheDocument()
@@ -29,10 +29,10 @@ describe('SceneRenderer', () => {
     expect(screen.queryByLabelText('Live technical deployment topology')).not.toBeInTheDocument()
     fireEvent.click(screen.getByRole('button', { name: 'Inspect technical topology' }))
     expect(screen.getByLabelText('Live technical deployment topology')).toBeInTheDocument()
-    expect(screen.getByText('OpenShift namespace')).toBeInTheDocument()
-    expect(screen.getByText('POST /api/proof')).toBeInTheDocument()
-    fireEvent.click(screen.getByRole('button', { name: /run the live journey/i }))
-    expect((await screen.findAllByText('Run the first condition'))[0]).toBeInTheDocument()
+    expect(screen.getByText('OpenShift participant namespace')).toBeInTheDocument()
+    expect(screen.getByText('POST /api/v1/qualify')).toBeInTheDocument()
+    fireEvent.click(screen.getByRole('button', { name: /run the qualification journey/i }))
+    expect((await screen.findAllByText('Qualify the healthy path'))[0]).toBeInTheDocument()
     expect(await screen.findByRole('button', { name: /next live act/i })).toBeInTheDocument()
   })
 
@@ -63,13 +63,13 @@ describe('SceneRenderer', () => {
   it('guides architecture as audience questions and revealed answers', async () => {
     const scene = scenes.find((item) => item.type === 'guided-architecture')!
     render(<SceneRenderer scene={scene} brand={demoConfig.brand} />)
-    expect(screen.getByText('What enters the system?')).toBeInTheDocument()
-    expect(screen.queryByText('A bounded, validated request starts the journey.')).not.toBeInTheDocument()
+    expect(screen.getByText('What may leave the guest?')).toBeInTheDocument()
+    expect(screen.queryByText('A versioned, bounded request with guest and correlation identity.')).not.toBeInTheDocument()
     fireEvent.click(screen.getByRole('button', { name: 'Reveal technical boundary' }))
-    expect(await screen.findByText('A bounded, validated request starts the journey.')).toBeInTheDocument()
-    expect(document.querySelector('[data-node="route"]')).toHaveClass('active')
+    expect(await screen.findByText('A versioned, bounded request with guest and correlation identity.')).toBeInTheDocument()
+    expect(document.querySelector('[data-node="vm-client"]')).toHaveClass('active')
     fireEvent.click(screen.getByRole('button', { name: 'Ask next question →' }))
-    expect(await screen.findByText('Where does the workload run and remain governable?')).toBeInTheDocument()
+    expect(await screen.findByText('Which network path is intentionally open?')).toBeInTheDocument()
   })
 
   it('keeps the presenter pitch at seven scenes or fewer', () => {
@@ -88,7 +88,7 @@ describe('SceneRenderer', () => {
     const configured = scenes.find((item) => item.type === 'evidence-payoff')!
     const scene = { ...configured, adapterIds: ['proof-that-has-not-run'] }
     render(<SceneRenderer scene={scene} brand={demoConfig.brand} />)
-    expect(screen.getByText('Run the live journey to populate this payoff')).toBeInTheDocument()
+    expect(screen.getByText('Run both conditions to populate the current-session evidence')).toBeInTheDocument()
     expect(screen.getByText('not run')).toBeInTheDocument()
   })
 

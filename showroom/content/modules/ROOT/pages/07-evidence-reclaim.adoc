@@ -1,0 +1,25 @@
+= 7. Export evidence and reclaim
+
+Create `learner-evidence-map.yaml` with one row for each claim: authored artifact,
+runtime object, evidence ID, source state, limitation, and human accept/reject
+decision. Include both healthy and unavailable conditions.
+
+Then reclaim the namespace and prove what remains:
+
+[source,bash]
+----
+oc get all,virtualmachine,networkpolicy -n "$LAB_NAMESPACE" \
+  -l app.kubernetes.io/part-of=virtualization-ai-201 -o name \
+  > before-reclaim.txt
+helm uninstall virtualization-ai-201 -n "$LAB_NAMESPACE"
+oc wait --for=delete virtualmachine/contract-author-vm \
+  -n "$LAB_NAMESPACE" --timeout=180s || true
+oc get all,virtualmachine,networkpolicy -n "$LAB_NAMESPACE" \
+  -l app.kubernetes.io/part-of=virtualization-ai-201 -o name \
+  > after-reclaim.txt
+test ! -s after-reclaim.txt
+----
+
+Checkpoint: your local cleanup receipt is review evidence, not Launchpad
+zero-residue certification. Record any retained namespace, Secret, PVC, event,
+or external model-side state explicitly.

@@ -1,0 +1,10 @@
+FROM cgr.dev/chainguard/python@sha256:b4f5a35502dfb90e79cd23a9f5b39776720c3a8ea29c22b21917791d715a3e1d
+ARG SOURCE_REVISION=unknown
+LABEL org.opencontainers.image.source="https://github.com/jkershawrh/virtualization-ai-201" \
+      org.opencontainers.image.revision="$SOURCE_REVISION"
+WORKDIR /app
+COPY --chown=65532:65532 workload /app/workload
+USER 65532:65532
+EXPOSE 8080
+ENTRYPOINT ["/usr/bin/python"]
+CMD ["-m", "workload.app"]

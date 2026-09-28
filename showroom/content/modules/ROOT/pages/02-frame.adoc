@@ -1,0 +1,23 @@
+= 2. Frame the acceptance contract
+
+Before editing implementation, write the acceptance rules:
+
+1. The request carries contract version, correlation ID, guest name/namespace,
+   bounded note, task, and complete allowed-category set.
+2. The VM never receives a model API key.
+3. A qualified response carries explicit source state, model identity,
+   deterministic validation, evidence ID, and human authority.
+4. An unavailable response carries no advisory or model fields.
+5. The evidence record hashes rather than stores the raw note.
+
+Run the repository tests once. The factory has already retained an intentional
+pre-implementation RED receipt; your local result should show precisely which
+starter fields remain incomplete.
+
+[source,bash]
+----
+python3 lab/qualify_submission.py lab/starter
+----
+
+Checkpoint: every failed check maps to one authored artifact, not to a hidden
+answer copied from 101.

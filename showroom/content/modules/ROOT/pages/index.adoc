@@ -1,0 +1,26 @@
+= Build and Qualify a VM-to-AI Contract
+
+This 75–90 minute lab begins after Virtualization + AI 101. The 101 evidence is
+a prerequisite only: you will author a new request/response contract, VM client,
+Secret reference, Service, NetworkPolicy, and adapter integration, then qualify
+healthy and model-unavailable behavior.
+
+Your exit artifact is a reviewable evidence map and cleanup receipt. A model may
+provide advisory text; it cannot change the VM, change the cluster, approve your
+work, or claim certification.
+
+== Source state
+
+The default environment is `REHEARSAL`. If Launchpad supplies an approved model
+endpoint and complete model/provider/Intel Xeon identity, the adapter may report
+`LIVE`. An unreachable or incomplete endpoint reports `OFFLINE` or a typed
+unavailable result. Never relabel one state as another.
+
+== What you will build
+
+* Versioned JSON request and response schemas
+* A correlation-aware client that runs inside the VM
+* A runtime Secret *reference* without any Secret value in source or the guest
+* A namespace-local Service and allow-list NetworkPolicy
+* Healthy and fail-closed qualification evidence
+* A human-owned acceptance decision and namespace reclaim receipt

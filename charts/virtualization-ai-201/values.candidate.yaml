@@ -1,0 +1,13 @@
+adapter:
+  image:
+    repository: localhost/virtualization-ai-201-adapter
+    tag: 0.1.0
+    digest: ""
+    pullPolicy: IfNotPresent
+
+presentation:
+  image:
+    repository: localhost/virtualization-ai-201-presentation
+    tag: 0.1.0
+    digest: ""
+    pullPolicy: IfNotPresent

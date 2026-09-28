@@ -1,0 +1,9 @@
+{
+  "source_state": "REHEARSAL",
+  "outcome": "QUALIFIED",
+  "ai_participated": "no",
+  "model_id": "rehearsal-fixture",
+  "category": "connectivity",
+  "authority": "HUMAN_REVIEW_REQUIRED",
+  "evidence_id": "22222222-2222-4222-8222-222222222222"
+}

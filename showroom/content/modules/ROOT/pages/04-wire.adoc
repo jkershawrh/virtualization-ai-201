@@ -1,0 +1,24 @@
+= 4. Wire Secret, Service, and policy
+
+Edit the three YAML starters:
+
+* `secret-reference.yaml` contains only `secretKeyRef` references.
+* `service.yaml` selects the adapter and exposes port 8080 inside the namespace.
+* `networkpolicy.yaml` defaults the adapter to deny, admits the VM launcher and
+  presentation, permits DNS, and adds model HTTPS egress only for an approved
+  CIDR.
+
+Never type a credential value into a manifest, terminal transcript, VM, fixture,
+or evidence record.
+
+[source,bash]
+----
+python3 lab/qualify_submission.py lab/starter
+helm template learner charts/virtualization-ai-201 \
+  --set adapter.mode=rehearsal \
+  --set vm.sshAuthorizedKey='ssh-ed25519 REPLACE_AT_RUNTIME' >/tmp/learner-render.yaml
+grep -nE 'secretKeyRef|NetworkPolicy|kind: Service' /tmp/learner-render.yaml
+----
+
+Checkpoint: identify one allowed path, one denied path, and the location where
+the credential enters the adapter without entering the guest.

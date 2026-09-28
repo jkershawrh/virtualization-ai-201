@@ -1,0 +1,23 @@
+= 5. Prove the healthy path
+
+Deploy only after the instructor supplies the namespace and runtime inputs.
+Rehearsal needs no Secret. LIVE requires an externally created Secret and an
+approved endpoint CIDR.
+
+[source,bash]
+----
+helm upgrade --install virtualization-ai-201 charts/virtualization-ai-201 \
+  --namespace "$LAB_NAMESPACE" --create-namespace \
+  --set vm.sshAuthorizedKey="$SSH_PUBLIC_KEY"
+oc -n "$LAB_NAMESPACE" wait deployment/virtualization-ai-201-adapter \
+  --for=condition=Available --timeout=180s
+virtctl -n "$LAB_NAMESPACE" ssh learner@contract-author-vm \
+  --command 'python3 /home/learner/vm_client.py'
+----
+
+Capture the guest request receipt, response, and `/api/v1/evidence/<evidence-id>`
+record. Verify the same correlation ID appears in all three and that the raw
+note and credential do not appear in evidence.
+
+Checkpoint: say `LIVE`, `REHEARSAL`, or `OFFLINE` before interpreting the result.
+Only `LIVE` with complete identity establishes model participation.

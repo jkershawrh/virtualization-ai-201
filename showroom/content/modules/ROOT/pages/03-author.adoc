@@ -1,0 +1,24 @@
+= 3. Author schemas and the VM client
+
+Edit these files and remove every `TODO` only after making the contract explicit:
+
+* `lab/starter/qualification-request.schema.json`
+* `lab/starter/qualification-response.schema.json`
+* `lab/starter/vm_client.py`
+
+The client must create a UUID correlation ID, derive guest identity at runtime,
+send only the bounded note and allowed categories, and emit a request hash. It
+must not read, accept, print, or forward a model credential.
+
+[source,bash]
+----
+python3 lab/qualify_submission.py lab/starter
+python3 -m json.tool lab/starter/qualification-request.schema.json >/dev/null
+python3 -m json.tool lab/starter/qualification-response.schema.json >/dev/null
+----
+
+Compare your contract behavior—not your source text—with the versioned reference
+under `contracts/`. Explain every difference in your evidence map.
+
+Checkpoint: invalid, incomplete, and secret-bearing requests fail before model
+invocation.

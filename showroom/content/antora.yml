@@ -1,0 +1,5 @@
+name: virtualization-ai-201
+title: Virtualization + AI 201
+version: master
+nav:
+  - modules/ROOT/nav.adoc
