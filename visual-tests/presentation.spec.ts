@@ -2,6 +2,8 @@ import { expect, test } from '@playwright/test'
 
 test('opening and architecture remain visually stable', async ({ page }) => {
   await page.goto('/')
+  await expect(page.getByRole('heading', { name: 'Virtualization + AI 201' })).toHaveCSS('opacity', '1')
+  await expect(page.getByText('Build and qualify a VM-to-AI contract')).toHaveCSS('opacity', '1')
   await expect(page).toHaveScreenshot('opening.png', { fullPage: true })
   await page.goto('/?act=1&scene=0')
   await expect(page).toHaveScreenshot('architecture.png', { fullPage: true })

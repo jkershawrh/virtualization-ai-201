@@ -1,0 +1,14 @@
+# Immutable factory candidates from GitHub Actions run 36477467751.
+# These digests are release inputs, not evidence of Launchpad certification.
+adapter:
+  image:
+    repository: ghcr.io/jkershawrh/virtualization-ai-201-adapter
+    tag: ""
+    digest: sha256:f17a7cc9c708e58186bd38878630dc563b853f78e1535be3435c0c8aec34eedb
+
+presentation:
+  image:
+    repository: ghcr.io/jkershawrh/virtualization-ai-201-presentation
+    tag: ""
+    digest: sha256:9f58d0a74d58201156547d21be2bc8a6b30f9d00619206dcce337d03e0ea4569
+

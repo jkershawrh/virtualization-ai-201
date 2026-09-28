@@ -1,0 +1,15 @@
+{
+  "schema_version": "demo-story.redhat-intel.com/zero-residue/v1",
+  "scope": "local container smoke environment",
+  "source_revision": "7928d13b9b00820e81f6c96ec047e3c22ec26e3f",
+  "removed": [
+    "virtualization-ai-201-presentation-smoke container",
+    "virtualization-ai-201-adapter-smoke container",
+    "virtualization-ai-201-smoke network"
+  ],
+  "remaining_matching_containers": 0,
+  "remaining_matching_networks": 0,
+  "openshift_reclaim": "NOT RUN; independent cluster qualification gate",
+  "created_at": "2026-09-28T20:15:05Z"
+}
+

@@ -9,6 +9,7 @@
 | Hands-on depth | GREEN for authored content | Learner authors schemas, client, Secret reference, Service, NetworkPolicy, evidence, and cleanup output |
 | Contract tests | GREEN | Request, qualified response, unavailable response, evidence, and rejection behavior are executable |
 | Factory browser verification | GREEN | Desktop zero-scroll, keyboard access, narrow rehearsal, fallback, and screenshots pass |
+| Immutable candidate release | GREEN for factory supply chain | Exact-source Linux/AMD64 images; full scan with zero HIGH/CRITICAL; SPDX SBOM; OIDC signature and attestations; exact-digest pull verified |
 | Live OpenShift journey | RED / not run | Requires approved OpenShift Virtualization environment and managed Intel Xeon model endpoint |
 | Capacity and reclaim certification | RED / not run | Requires measured 1-, 5-, and 25-seat runs plus independent zero-residue proof |
 | Launchpad authority | RED / not granted | Source approval, trusted render, artifact review, certification, promotion, and publication remain external |

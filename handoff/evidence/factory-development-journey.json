@@ -1,0 +1,36 @@
+{
+  "schema_version": "demo-story.redhat-intel.com/factory-development-journey/v1",
+  "source_revision": "7928d13b9b00820e81f6c96ec047e3c22ec26e3f",
+  "method": ["CDD", "TDD", "EDD"],
+  "contract_gate": {
+    "status": "PASS_WITH_DECLARED_UNKNOWN",
+    "blueprint": "reviewed",
+    "unresolved_fields": 1,
+    "unresolved_reason": "No approved live OpenShift Virtualization and model environment was attached to the factory."
+  },
+  "red_before_green": {
+    "status": "PASS",
+    "red_commit": "3cd4031380fa9ebecd1f432bd21ab00c7e396824",
+    "observed_result": "1 expected failing implementation-assets test; 4 contract tests passing",
+    "receipt": "docs/cdd-red-run.md"
+  },
+  "test_gate": {
+    "status": "PASS",
+    "python_tests": 30,
+    "vitest_tests": 32,
+    "browser_tests_passed": 14,
+    "browser_tests_skipped": 1,
+    "helm_charts_linted": 1,
+    "npm_audit_vulnerabilities": 0
+  },
+  "artifact_gate": {
+    "status": "PASS_PUBLISHED_CANDIDATE",
+    "architectures": ["linux/amd64"],
+    "container_smoke": "PASS through presentation proxy for healthy and fail-closed model-unavailable conditions",
+    "published_scan_high": 0,
+    "published_scan_critical": 0
+  },
+  "integrated_cluster_gate": "NOT_RUN_IN_FACTORY",
+  "authority": "This receipt grants no catalog, provisioning, certification, promotion, or publication authority.",
+  "created_at": "2026-09-28T20:15:05Z"
+}

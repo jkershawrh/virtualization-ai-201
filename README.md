@@ -73,6 +73,26 @@ source control and supply its name plus an approved model endpoint CIDR. The
 chart projects the Secret only into the adapter, never into the VM or
 presentation.
 
+## Immutable factory candidates
+
+GitHub Actions run
+[`36477467751`](https://github.com/jkershawrh/virtualization-ai-201/actions/runs/36477467751)
+published exact-source, Linux/AMD64 candidates from revision
+`7928d13b9b00820e81f6c96ec047e3c22ec26e3f`:
+
+- adapter: `ghcr.io/jkershawrh/virtualization-ai-201-adapter@sha256:f17a7cc9c708e58186bd38878630dc563b853f78e1535be3435c0c8aec34eedb`
+- presentation: `ghcr.io/jkershawrh/virtualization-ai-201-presentation@sha256:9f58d0a74d58201156547d21be2bc8a6b30f9d00619206dcce337d03e0ea4569`
+
+Both candidates passed complete Grype 0.97.1 inventories with zero HIGH and
+zero CRITICAL findings. The adapter inventory contains six MEDIUM findings and
+the presentation inventory four. SPDX SBOMs, GitHub OIDC signatures, custom
+provenance attestations, SBOM attestations, and exact-digest verification are
+retained for 90 days. `charts/virtualization-ai-201/values.published.yaml`
+selects only these digests.
+
+The proposed Launchpad handoff remains non-certified, non-orderable, and capped
+at zero workshop seats until its independent live gates pass.
+
 ## Evidence boundary
 
 No factory check claims a live OpenShift journey, supported-version result,

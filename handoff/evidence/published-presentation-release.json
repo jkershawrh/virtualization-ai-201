@@ -1,0 +1,48 @@
+{
+  "schema_version": "demo-story.redhat-intel.com/artifact-release/v1",
+  "evidence_scope": "published_immutable_candidate",
+  "component": "presentation",
+  "source_repository": "https://github.com/jkershawrh/virtualization-ai-201",
+  "source_revision": "7928d13b9b00820e81f6c96ec047e3c22ec26e3f",
+  "image": "ghcr.io/jkershawrh/virtualization-ai-201-presentation@sha256:9f58d0a74d58201156547d21be2bc8a6b30f9d00619206dcce337d03e0ea4569",
+  "architecture": "linux/amd64",
+  "workflow": {
+    "run_id": 36477467751,
+    "url": "https://github.com/jkershawrh/virtualization-ai-201/actions/runs/36477467751",
+    "conclusion": "success",
+    "dispatch_source_matched": true
+  },
+  "scan": {
+    "scanner": "Grype 0.97.1",
+    "scope": "complete inventory; gate includes findings without a published fix",
+    "severity_counts": {"critical": 0, "high": 0, "medium": 4, "low": 0, "negligible": 0, "unknown": 0},
+    "hard_gate": "PASS: zero HIGH or CRITICAL findings",
+    "full_report_artifact": "virtualization-ai-201-presentation-7928d13b9b00820e81f6c96ec047e3c22ec26e3f/vulnerability-full-presentation.json",
+    "full_report_sha256": "bbe9075cefbd0f4293af0c89244b5bae21a14275bbefeea449b7531d13278573",
+    "gate_report_sha256": "9f460490153a19e4ddd456fe40822c5e8b990233729c4c005520802911715906"
+  },
+  "sbom": {
+    "format": "SPDX JSON",
+    "packages": 26,
+    "artifact": "virtualization-ai-201-presentation-7928d13b9b00820e81f6c96ec047e3c22ec26e3f/sbom-presentation.spdx.json",
+    "sha256": "74906f048e0c9281bd1139d6112015ead1eccdb29dd1b42cb92dc2821ac817f6"
+  },
+  "supply_chain": {
+    "exact_digest_pull": "PASS",
+    "source_revision_label": "PASS",
+    "oidc_signature_verification": "PASS",
+    "spdx_attestation_verification": "PASS",
+    "provenance_attestation_verification": "PASS",
+    "verification_artifact": "virtualization-ai-201-published-presentation-7928d13b9b00820e81f6c96ec047e3c22ec26e3f",
+    "image_reference_sha256": "8667263ab93b289d88473b3d45f6eb9a758ca4030dcb3459c22ad62b34b358f9",
+    "provenance_sha256": "d7a7a8b8b2ece4c635ef7fc25528c68c41b1fac435645c9b7361577666e495d0",
+    "signature_verification_sha256": "b527468ea8f57e317a9e33b4c0c53e6b404e410c11e6d4cdd7c152ef00574683",
+    "sbom_attestation_verification_sha256": "71442fd6329f5dc0beb585e5ca5110e93d507ac231eee80420a6243dcf72e836",
+    "provenance_attestation_verification_sha256": "c8b2c37249168b4a58a22c701bec9990096616c7660455cba6e64ae6fa090390"
+  },
+  "retention_days": 90,
+  "certification": "NOT CLAIMED",
+  "live_openshift_validation": "NOT RUN",
+  "created_at": "2026-09-28T20:15:05Z"
+}
+

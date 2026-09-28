@@ -1,0 +1,32 @@
+{
+  "schema_version": "demo-story.redhat-intel.com/published-release/v1",
+  "evidence_scope": "published_immutable_candidates",
+  "source_revision": "7928d13b9b00820e81f6c96ec047e3c22ec26e3f",
+  "workflow_run": "https://github.com/jkershawrh/virtualization-ai-201/actions/runs/36477467751",
+  "workflow_conclusion": "success",
+  "platform": "linux/amd64",
+  "images": {
+    "adapter": "ghcr.io/jkershawrh/virtualization-ai-201-adapter@sha256:f17a7cc9c708e58186bd38878630dc563b853f78e1535be3435c0c8aec34eedb",
+    "presentation": "ghcr.io/jkershawrh/virtualization-ai-201-presentation@sha256:9f58d0a74d58201156547d21be2bc8a6b30f9d00619206dcce337d03e0ea4569"
+  },
+  "gates": {
+    "exact_source_checkout": "PASS",
+    "local_project_checks": "PASS",
+    "complete_vulnerability_inventory": "PASS",
+    "zero_high_or_critical": "PASS",
+    "spdx_sbom": "PASS",
+    "exact_digest_pull": "PASS",
+    "oidc_signature": "PASS",
+    "provenance_attestation": "PASS",
+    "sbom_attestation": "PASS",
+    "verification_evidence_retained": "PASS"
+  },
+  "scan_counts": {
+    "adapter": {"critical": 0, "high": 0, "medium": 6},
+    "presentation": {"critical": 0, "high": 0, "medium": 4}
+  },
+  "certification": "NOT CLAIMED",
+  "live_openshift_validation": "NOT RUN",
+  "created_at": "2026-09-28T20:15:05Z"
+}
+

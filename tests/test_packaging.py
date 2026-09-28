@@ -52,6 +52,19 @@ class PackagingTests(unittest.TestCase):
         self.assertNotIn("api-key-value", render.stdout)
         self.assertIn("203.0.113.10/32", render.stdout)
 
+    def test_published_overlay_uses_exact_immutable_candidates(self):
+        values = yaml.safe_load((CHART / "values.published.yaml").read_text())
+        self.assertEqual(
+            values["adapter"]["image"]["digest"],
+            "sha256:f17a7cc9c708e58186bd38878630dc563b853f78e1535be3435c0c8aec34eedb",
+        )
+        self.assertEqual(
+            values["presentation"]["image"]["digest"],
+            "sha256:9f58d0a74d58201156547d21be2bc8a6b30f9d00619206dcce337d03e0ea4569",
+        )
+        self.assertEqual(values["adapter"]["image"]["tag"], "")
+        self.assertEqual(values["presentation"]["image"]["tag"], "")
+
 
 if __name__ == "__main__":
     unittest.main()

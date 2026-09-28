@@ -1,0 +1,19 @@
+api_version: launchpad.redhat.com/v1alpha1
+kind: CatalogOnboardingProposal
+metadata:
+  catalog_item_id: virtualization-ai-201
+  status: draft
+spec:
+  repository: https://github.com/jkershawrh/virtualization-ai-201
+  revision: 7928d13b9b00820e81f6c96ec047e3c22ec26e3f
+  learning_level: "201"
+  prerequisite: virtualization-ai-foundations-101
+  source_classes:
+    showroom: {playbook: showroom/default-site.yml, start_path: showroom/content}
+    workload: {deploy_path: charts/virtualization-ai-201}
+  requested_actions: [approve_source, run_discovery]
+  authority:
+    may_modify_catalog: false
+    may_provision: false
+    may_publish: false
+
