@@ -11,5 +11,6 @@ LABEL org.opencontainers.image.source="https://github.com/jkershawrh/virtualizat
       org.opencontainers.image.revision="$SOURCE_REVISION" \
       org.opencontainers.image.title="Virtualization + AI 201 presentation"
 COPY --from=build /opt/app-root/src/dist /usr/share/nginx/html
+COPY nginx-main.conf /etc/nginx/nginx.conf
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 EXPOSE 8080
