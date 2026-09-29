@@ -1,0 +1,10 @@
+FROM quay.io/rh-ee-jkershaw/launchpad-showroom-git-cloner@sha256:2dbcdc5955c5ece1b3bc88c26f85f18122eb317624e1cda160f9d347754d2cc5
+
+USER 0
+COPY showroom /bundle/showroom
+COPY showroom-content/entrypoint.sh /content-entrypoint.sh
+RUN chmod 0755 /content-entrypoint.sh \
+    && chown -R 1001:0 /bundle
+USER 1001
+
+ENTRYPOINT ["/content-entrypoint.sh"]

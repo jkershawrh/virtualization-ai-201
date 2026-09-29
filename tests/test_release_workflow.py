@@ -39,9 +39,17 @@ class ReleaseWorkflowTests(unittest.TestCase):
         ):
             self.assertIn(expected, self.text)
 
-    def test_both_201_images_are_released(self):
+    def test_runtime_and_sanitized_showroom_images_are_released(self):
         self.assertIn("virtualization-ai-201-presentation", self.text)
         self.assertIn("virtualization-ai-201-adapter", self.text)
+        self.assertIn("virtualization-ai-201-showroom-content", self.text)
+        self.assertIn("containerfile: showroom-content/Containerfile", self.text)
+
+        containerfile = (ROOT / "showroom-content" / "Containerfile").read_text()
+        entrypoint = (ROOT / "showroom-content" / "entrypoint.sh").read_text()
+        self.assertIn("COPY showroom /bundle/showroom", containerfile)
+        self.assertNotIn("COPY . ", containerfile)
+        self.assertNotIn("git clone", entrypoint)
 
 
 if __name__ == "__main__":
