@@ -39,7 +39,9 @@ spec:
 apiVersion: route.openshift.io/v1
 kind: Route
 metadata:
-  name: virtualization-ai-201-presentation
+  # Keep the Route name short enough for OpenShift's generated
+  # <route>-<namespace> hostname when Launchpad uses descriptive seat names.
+  name: virt-ai-201
   labels:
     {{- include "virtualization-ai-201.labels" . | nindent 4 }}
 spec:
