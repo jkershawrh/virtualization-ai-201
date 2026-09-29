@@ -56,11 +56,11 @@ class PackagingTests(unittest.TestCase):
         values = yaml.safe_load((CHART / "values.published.yaml").read_text())
         self.assertEqual(
             values["adapter"]["image"]["digest"],
-            "sha256:f17a7cc9c708e58186bd38878630dc563b853f78e1535be3435c0c8aec34eedb",
+            "sha256:ff9c6bd189955ebfee6e97714e62908d53824a39fac50c3a78b27466e7825e62",
         )
         self.assertEqual(
             values["presentation"]["image"]["digest"],
-            "sha256:9f58d0a74d58201156547d21be2bc8a6b30f9d00619206dcce337d03e0ea4569",
+            "sha256:b6b7cf41d5044c005f84bbade273edad0daed061060094e11d202b24c95c0ee3",
         )
         self.assertEqual(values["adapter"]["image"]["tag"], "")
         self.assertEqual(values["presentation"]["image"]["tag"], "")
