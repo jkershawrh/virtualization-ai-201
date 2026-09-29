@@ -1,8 +1,11 @@
 FROM docker.io/library/golang@sha256:1b2cb58c3df8b93b8bcb5739778692c35e491087599139deb2c8c03567cbb03e AS builder
+ARG TARGETOS
+ARG TARGETARCH
 USER 0
 WORKDIR /src
 COPY showroom-content/main.go .
-RUN CGO_ENABLED=0 go build -trimpath -ldflags="-s -w" -o /out/content-loader main.go
+RUN CGO_ENABLED=0 GOOS="${TARGETOS}" GOARCH="${TARGETARCH}" \
+    go build -trimpath -ldflags="-s -w" -o /out/content-loader main.go
 
 FROM scratch
 COPY --from=builder --chown=1001:0 /out/content-loader /content-loader
