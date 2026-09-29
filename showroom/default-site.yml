@@ -4,7 +4,7 @@ site:
 content:
   sources:
     - url: ./content
-      start_path: .
+      branches: HEAD
 ui:
   bundle:
     url: https://github.com/rhpds/showroom_theme_rhdp/releases/download/v0.0.1/ui-bundle.zip

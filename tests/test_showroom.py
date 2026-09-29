@@ -11,7 +11,10 @@ SHOWROOM = ROOT / "showroom"
 class ShowroomTests(unittest.TestCase):
     def test_showroom_has_independent_playbook(self):
         playbook = SHOWROOM / "default-site.yml"
-        self.assertIn("start_page: virtualization-ai-201::index.adoc", playbook.read_text())
+        playbook_text = playbook.read_text()
+        self.assertIn("start_page: virtualization-ai-201::index.adoc", playbook_text)
+        self.assertIn("branches: HEAD", playbook_text)
+        self.assertNotIn("start_path: .", playbook_text)
 
     def test_lab_is_complete_and_construction_led(self):
         antora = yaml.safe_load((SHOWROOM / "content/antora.yml").read_text())
