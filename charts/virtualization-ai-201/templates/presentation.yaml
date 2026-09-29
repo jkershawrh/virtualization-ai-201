@@ -41,7 +41,7 @@ kind: Route
 metadata:
   # Keep the Route name short enough for OpenShift's generated
   # <route>-<namespace> hostname when Launchpad uses descriptive seat names.
-  name: virt-ai-201
+  name: lab
   labels:
     {{- include "virtualization-ai-201.labels" . | nindent 4 }}
 spec:

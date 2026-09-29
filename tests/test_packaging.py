@@ -28,6 +28,8 @@ class PackagingTests(unittest.TestCase):
         self.assertEqual(render.returncode, 0, render.stderr)
         for kind in ("VirtualMachine", "NetworkPolicy", "Service", "Deployment"):
             self.assertIn(f"kind: {kind}", render.stdout)
+        self.assertIn("kind: Route", render.stdout)
+        self.assertIn("name: lab", render.stdout)
         self.assertNotIn("MODEL_API_KEY\n", render.stdout)
 
     def test_defaults_are_rehearsal_fail_closed_and_secret_free(self):
