@@ -3,16 +3,28 @@ ARG TARGETOS
 ARG TARGETARCH
 USER 0
 WORKDIR /src
+RUN apk add --no-cache git
 COPY showroom-content/main.go .
 RUN CGO_ENABLED=0 GOOS="${TARGETOS}" GOARCH="${TARGETARCH}" \
     go build -trimpath -ldflags="-s -w" -o /out/content-loader main.go
 
+# Antora requires a local content source to be a Git worktree. Build a minimal,
+# deterministic repository containing only the authored AsciiDoc; do not ship
+# the source repository's history or credentials in the runtime image.
+COPY showroom/content /out/content
+RUN git init /out/content \
+    && git -C /out/content config user.name "Launchpad Release" \
+    && git -C /out/content config user.email "release@launchpad.invalid" \
+    && git -C /out/content add . \
+    && git -C /out/content commit -m "Package immutable Showroom content"
+
 FROM scratch
 COPY --from=builder --chown=1001:0 /out/content-loader /content-loader
 COPY --chown=1001:0 showroom /bundle/showroom
-# The deployed Showroom Antora runtime validates /showroom/repo/content before
-# reading the repository-local playbook. Preserve the source tree and expose
-# the declared Antora component at that stable runtime path.
-COPY --chown=1001:0 showroom/content /bundle/content
+# Preserve a minimal Git worktree at both paths used by the runtime contract.
+# The playbook resolves ./content relative to /showroom/repo/showroom, while
+# Launchpad also validates the stable top-level /showroom/repo/content path.
+COPY --from=builder --chown=1001:0 /out/content /bundle/showroom/content
+COPY --from=builder --chown=1001:0 /out/content /bundle/content
 USER 1001
 ENTRYPOINT ["/content-loader"]
