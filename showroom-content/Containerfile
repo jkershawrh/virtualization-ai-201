@@ -1,4 +1,4 @@
-FROM quay.io/rh-ee-jkershaw/launchpad-showroom-git-cloner@sha256:2dbcdc5955c5ece1b3bc88c26f85f18122eb317624e1cda160f9d347754d2cc5
+FROM registry.access.redhat.com/ubi9/ubi-minimal@sha256:0ef315bdcbb0837a5315d209b0590e081c93012bf339eabc7ddb35f141443987
 
 USER 0
 COPY showroom /bundle/showroom
