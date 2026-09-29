@@ -15,6 +15,11 @@ class ShowroomTests(unittest.TestCase):
         self.assertIn("start_page: virtualization-ai-201::index.adoc", playbook_text)
         self.assertIn("branches: HEAD", playbook_text)
         self.assertNotIn("start_path: .", playbook_text)
+        self.assertIn(
+            "https://github.com/rhpds/rhdp_showroom_theme/releases/download/v2.0.3/ui-bundle.zip",
+            playbook_text,
+        )
+        self.assertNotIn("showroom_theme_rhdp/releases/download/v0.0.1", playbook_text)
 
     def test_lab_is_complete_and_construction_led(self):
         antora = yaml.safe_load((SHOWROOM / "content/antora.yml").read_text())
