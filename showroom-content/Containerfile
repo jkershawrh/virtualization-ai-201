@@ -10,5 +10,9 @@ RUN CGO_ENABLED=0 GOOS="${TARGETOS}" GOARCH="${TARGETARCH}" \
 FROM scratch
 COPY --from=builder --chown=1001:0 /out/content-loader /content-loader
 COPY --chown=1001:0 showroom /bundle/showroom
+# The deployed Showroom Antora runtime validates /showroom/repo/content before
+# reading the repository-local playbook. Preserve the source tree and expose
+# the declared Antora component at that stable runtime path.
+COPY --chown=1001:0 showroom/content /bundle/content
 USER 1001
 ENTRYPOINT ["/content-loader"]

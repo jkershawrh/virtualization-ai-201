@@ -48,6 +48,7 @@ class ReleaseWorkflowTests(unittest.TestCase):
         containerfile = (ROOT / "showroom-content" / "Containerfile").read_text()
         loader = (ROOT / "showroom-content" / "main.go").read_text()
         self.assertIn("showroom /bundle/showroom", containerfile)
+        self.assertIn("showroom/content /bundle/content", containerfile)
         self.assertNotIn("COPY . ", containerfile)
         self.assertNotIn("git clone", loader)
 
