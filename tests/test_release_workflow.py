@@ -46,10 +46,10 @@ class ReleaseWorkflowTests(unittest.TestCase):
         self.assertIn("containerfile: showroom-content/Containerfile", self.text)
 
         containerfile = (ROOT / "showroom-content" / "Containerfile").read_text()
-        entrypoint = (ROOT / "showroom-content" / "entrypoint.sh").read_text()
-        self.assertIn("COPY showroom /bundle/showroom", containerfile)
+        loader = (ROOT / "showroom-content" / "main.go").read_text()
+        self.assertIn("showroom /bundle/showroom", containerfile)
         self.assertNotIn("COPY . ", containerfile)
-        self.assertNotIn("git clone", entrypoint)
+        self.assertNotIn("git clone", loader)
 
 
 if __name__ == "__main__":
