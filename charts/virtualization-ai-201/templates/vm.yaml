@@ -56,6 +56,6 @@ spec:
             image: {{ include "virtualization-ai-201.image" .Values.vm.containerDisk | quote }}
         - name: cloudinit
           cloudInitNoCloud:
-            userDataSecretRef:
+            secretRef:
               name: {{ .Values.vm.name }}-cloudinit
 {{- end }}
