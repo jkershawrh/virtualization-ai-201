@@ -1,4 +1,32 @@
 {{- if .Values.vm.enabled }}
+apiVersion: v1
+kind: Secret
+metadata:
+  name: {{ .Values.vm.name }}-cloudinit
+  labels:
+    app.kubernetes.io/name: virtualization-ai-201-vm
+    {{- include "virtualization-ai-201.labels" . | nindent 4 }}
+type: Opaque
+stringData:
+  userdata: |
+    #cloud-config
+    users:
+      - name: learner
+        sudo: ALL=(ALL) NOPASSWD:ALL
+        {{- if .Values.vm.sshAuthorizedKey }}
+        ssh_authorized_keys:
+          - {{ .Values.vm.sshAuthorizedKey | quote }}
+        {{- end }}
+    write_files:
+      - path: /home/learner/vm_client.py.b64
+        owner: learner:learner
+        permissions: '0600'
+        content: {{ .Files.Get "files/vm_client.py" | b64enc | quote }}
+    runcmd:
+      - [sh, -c, "base64 -d /home/learner/vm_client.py.b64 > /home/learner/vm_client.py"]
+      - [chown, learner:learner, /home/learner/vm_client.py]
+      - [chmod, '0755', /home/learner/vm_client.py]
+---
 apiVersion: kubevirt.io/v1
 kind: VirtualMachine
 metadata:
@@ -28,22 +56,6 @@ spec:
             image: {{ include "virtualization-ai-201.image" .Values.vm.containerDisk | quote }}
         - name: cloudinit
           cloudInitNoCloud:
-            userData: |
-              #cloud-config
-              users:
-                - name: learner
-                  sudo: ALL=(ALL) NOPASSWD:ALL
-                  {{- if .Values.vm.sshAuthorizedKey }}
-                  ssh_authorized_keys:
-                    - {{ .Values.vm.sshAuthorizedKey | quote }}
-                  {{- end }}
-              write_files:
-                - path: /home/learner/vm_client.py.b64
-                  owner: learner:learner
-                  permissions: '0600'
-                  content: {{ .Files.Get "files/vm_client.py" | b64enc | quote }}
-              runcmd:
-                - [sh, -c, "base64 -d /home/learner/vm_client.py.b64 > /home/learner/vm_client.py"]
-                - [chown, learner:learner, /home/learner/vm_client.py]
-                - [chmod, '0755', /home/learner/vm_client.py]
+            userDataSecretRef:
+              name: {{ .Values.vm.name }}-cloudinit
 {{- end }}
