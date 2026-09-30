@@ -19,7 +19,7 @@ spec:
       securityContext: {runAsNonRoot: true, seccompProfile: {type: RuntimeDefault}}
       containers:
         - name: adapter
-          image: {{ include "virtualization-ai-201.image" .Values.adapter.image | quote }}
+          image: {{ default (include "virtualization-ai-201.image" .Values.adapter.image) .Values.workload_image | quote }}
           imagePullPolicy: {{ .Values.adapter.image.pullPolicy }}
           securityContext:
             allowPrivilegeEscalation: false

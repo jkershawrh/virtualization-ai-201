@@ -20,7 +20,7 @@ spec:
       securityContext: {runAsNonRoot: true, seccompProfile: {type: RuntimeDefault}}
       containers:
         - name: presentation
-          image: {{ include "virtualization-ai-201.image" .Values.presentation.image | quote }}
+          image: {{ default (include "virtualization-ai-201.image" .Values.presentation.image) .Values.presentation_image | quote }}
           imagePullPolicy: {{ .Values.presentation.image.pullPolicy }}
           securityContext: {allowPrivilegeEscalation: false, capabilities: {drop: [ALL]}}
           ports: [{name: http, containerPort: 8080}]
