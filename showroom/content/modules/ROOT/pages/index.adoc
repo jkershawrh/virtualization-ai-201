@@ -9,6 +9,17 @@ Your exit artifact is a reviewable evidence map and cleanup receipt. A model may
 provide advisory text; it cannot change the VM, change the cluster, approve your
 work, or claim certification.
 
+== The learning loop
+
+* *Show* — inspect the provisioned VM, adapter, Service, NetworkPolicy, and
+  current adapter mode.
+* *Learn* — define the contract and explain why the guest never receives a
+  model credential.
+* *Do* — complete the starter schemas and client, render the integration, and
+  exercise healthy and unavailable API paths.
+* *Prove* — correlate the response with server evidence, distinguish live
+  inference from rehearsal, preserve human authority, and clean learner files.
+
 == Source state
 
 The default environment is `REHEARSAL`. If Launchpad supplies an approved model

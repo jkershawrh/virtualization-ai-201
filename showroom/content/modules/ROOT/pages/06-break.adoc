@@ -1,20 +1,35 @@
 = 6. Break it safely
 
-Repeat the same request through the declared unavailable condition. Keep the VM,
-Service, schemas, correlation rules, and human authority unchanged.
+== Do
 
-[source,bash]
+Repeat the same request through the declared unavailable condition. Keep the
+VM, Service, schemas, correlation rules, and human authority unchanged.
+
+[source,bash,role="execute"]
 ----
-oc -n "$LAB_NAMESPACE" port-forward service/virtualization-ai-201-adapter 8080:8080
-curl --fail-with-body -sS \
+curl -fsS -X POST "$ADAPTER_URL/api/v1/qualify?condition=unavailable" \
   -H 'Content-Type: application/json' \
-  -H 'X-Qualification-Condition: unavailable' \
-  --data @contracts/examples/qualified-request.json \
-  http://127.0.0.1:8080/api/v1/qualify | python3 -m json.tool
+  --data-binary @"$LAB_DIR/request.json" \
+  | tee "$LAB_DIR/unavailable-response.json" | jq .
 ----
 
-The response must say `MODEL_UNAVAILABLE`, set `ai_participated` to `false`,
-and omit `advisory` and `model`. A fallback explanation is not a live AI result.
+== Learn
 
-Checkpoint: the failure names the boundary and preserves evidence without
-inventing a category, summary, rationale, model identity, or action.
+An unavailable model must fail closed. A fallback explanation is not a live AI
+result and must not be presented as one.
+
+== Prove
+
+[source,bash,role="execute"]
+----
+jq -e '
+  .outcome == "MODEL_UNAVAILABLE" and
+  .ai_participated == false and
+  .validation == "FAIL_CLOSED" and
+  .authority == "HUMAN_REVIEW_REQUIRED" and
+  (has("advisory") | not) and (has("model") | not)
+' "$LAB_DIR/unavailable-response.json"
+----
+
+The result names the failed boundary and preserves evidence without inventing
+a category, summary, rationale, model identity, or action.

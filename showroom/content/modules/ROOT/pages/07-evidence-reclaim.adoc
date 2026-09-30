@@ -1,25 +1,56 @@
-= 7. Export evidence and reclaim
+= 7. Export evidence and clean learner artifacts
 
-Create `learner-evidence-map.yaml` with one row for each claim: authored artifact,
-runtime object, evidence ID, source state, limitation, and human accept/reject
-decision. Include both healthy and unavailable conditions.
+== Show
 
-Then reclaim the namespace and prove what remains:
+Create a compact evidence map for the artifacts and runtime proof you produced.
 
-[source,bash]
+[source,bash,role="execute"]
 ----
-oc get all,virtualmachine,networkpolicy -n "$LAB_NAMESPACE" \
-  -l app.kubernetes.io/part-of=virtualization-ai-201 -o name \
-  > before-reclaim.txt
-helm uninstall virtualization-ai-201 -n "$LAB_NAMESPACE"
-oc wait --for=delete virtualmachine/contract-author-vm \
-  -n "$LAB_NAMESPACE" --timeout=180s || true
-oc get all,virtualmachine,networkpolicy -n "$LAB_NAMESPACE" \
-  -l app.kubernetes.io/part-of=virtualization-ai-201 -o name \
-  > after-reclaim.txt
-test ! -s after-reclaim.txt
+jq -n \
+  --arg evidence_id "$EVIDENCE_ID" \
+  --arg source_state "$(jq -r .source_state "$LAB_DIR/response.json")" \
+  --arg decision "ACCEPT_FOR_FURTHER_VALIDATION" \
+  '{
+    claim:"VM-to-AI contract is ready for further validation",
+    authored_artifacts:["request schema","response schema","VM client","Secret reference","Service","NetworkPolicy"],
+    evidence_id:$evidence_id,
+    source_state:$source_state,
+    human_decision:$decision,
+    limitation:"not Launchpad certification or production approval"
+  }' | tee "$LAB_DIR/learner-evidence-map.json" | jq .
 ----
 
-Checkpoint: your local cleanup receipt is review evidence, not Launchpad
-zero-residue certification. Record any retained namespace, Secret, PVC, event,
-or external model-side state explicitly.
+== Learn
+
+The VM, adapter, Service, NetworkPolicies, presentation, and Showroom are
+platform-owned resources. A participant must not uninstall the Helm release or
+delete the namespace. Launchpad owns full reclamation and zero-residue proof.
+
+== Do
+
+Stop the local tunnel and remove only your generated files.
+
+[source,bash,role="execute"]
+----
+cp "$LAB_DIR/learner-evidence-map.json" /tmp/virtualization-ai-201-evidence.json
+if test -f "$LAB_DIR/port-forward.pid"; then
+  kill "$(cat "$LAB_DIR/port-forward.pid")" 2>/dev/null || true
+fi
+rm -f "$LAB_DIR"/*.json "$LAB_DIR"/*.log "$LAB_DIR"/*.pid
+rmdir "$LAB_DIR"
+----
+
+== Prove
+
+[source,bash,role="execute"]
+----
+test ! -e "$LAB_DIR"
+jq -e '.human_decision == "ACCEPT_FOR_FURTHER_VALIDATION"' \
+  /tmp/virtualization-ai-201-evidence.json
+oc auth can-i delete namespaces | grep -qx no
+oc get virtualmachine contract-author-vm -o name
+oc get deployment virtualization-ai-201-adapter -o name
+----
+
+Your local cleanup receipt is review evidence. Launchpad must separately prove
+namespace, Secret, Route, RoleBinding, event, and external model-side cleanup.

@@ -47,6 +47,30 @@ class ShowroomTests(unittest.TestCase):
         for path in (ROOT / "lab/starter").iterdir():
             self.assertIn("TODO", path.read_text(), path.name)
 
+    def test_lab_exposes_show_learn_do_prove_and_executable_steps(self):
+        pages = SHOWROOM / "content/modules/ROOT/pages"
+        text = "\n".join(path.read_text() for path in sorted(pages.glob("*.adoc")))
+        for stage in ("== Show", "== Learn", "== Do", "== Prove"):
+            self.assertIn(stage, text)
+        self.assertGreaterEqual(text.count('role="execute"'), 8)
+
+    def test_runtime_proof_uses_console_and_truthful_inference_assertions(self):
+        prove = (SHOWROOM / "content/modules/ROOT/pages/05-prove.adoc").read_text()
+        self.assertIn("OpenShift Console", prove)
+        self.assertIn("VirtualMachines", prove)
+        self.assertIn('source_state == "LIVE"', prove)
+        self.assertIn('ai_participated == true', prove)
+        self.assertIn('source_state == "REHEARSAL"', prove)
+        self.assertIn('ai_participated == false', prove)
+
+    def test_participant_cleanup_preserves_launchpad_owned_runtime(self):
+        reclaim = (SHOWROOM / "content/modules/ROOT/pages/07-evidence-reclaim.adoc").read_text()
+        self.assertIn("Launchpad", reclaim)
+        self.assertIn("must not uninstall", reclaim)
+        self.assertNotIn("helm uninstall", reclaim)
+        self.assertIn("rm -f", reclaim)
+        self.assertIn('role="execute"', reclaim)
+
 
 if __name__ == "__main__":
     unittest.main()

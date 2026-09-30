@@ -1,5 +1,7 @@
 = 4. Wire Secret, Service, and policy
 
+== Do
+
 Edit the three YAML starters:
 
 * `secret-reference.yaml` contains only `secretKeyRef` references.
@@ -11,7 +13,7 @@ Edit the three YAML starters:
 Never type a credential value into a manifest, terminal transcript, VM, fixture,
 or evidence record.
 
-[source,bash]
+[source,bash,role="execute"]
 ----
 python3 lab/qualify_submission.py lab/starter
 helm template learner charts/virtualization-ai-201 \
@@ -22,3 +24,8 @@ grep -nE 'secretKeyRef|NetworkPolicy|kind: Service' /tmp/learner-render.yaml
 
 Checkpoint: identify one allowed path, one denied path, and the location where
 the credential enters the adapter without entering the guest.
+
+== Prove
+
+The rendered YAML must contain `secretKeyRef`, `Service`, and `NetworkPolicy`,
+but must not contain a credential value.

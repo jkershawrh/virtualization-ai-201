@@ -1,5 +1,7 @@
 = 2. Frame the acceptance contract
 
+== Learn
+
 Before editing implementation, write the acceptance rules:
 
 1. The request carries contract version, correlation ID, guest name/namespace,
@@ -14,10 +16,15 @@ Run the repository tests once. The factory has already retained an intentional
 pre-implementation RED receipt; your local result should show precisely which
 starter fields remain incomplete.
 
-[source,bash]
+[source,bash,role="execute"]
 ----
 python3 lab/qualify_submission.py lab/starter
 ----
 
 Checkpoint: every failed check maps to one authored artifact, not to a hidden
 answer copied from 101.
+
+== Prove
+
+Keep the failing check names. They are the RED evidence that your authored
+artifacts must turn GREEN.

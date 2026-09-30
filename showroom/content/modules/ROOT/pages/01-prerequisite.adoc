@@ -1,5 +1,7 @@
 = 1. Confirm the 101 boundary
 
+== Show
+
 You should already be able to explain the established path:
 
 `VirtualMachine → Service → validation adapter → governed model → evidence → human`
@@ -8,12 +10,17 @@ Record why each boundary exists. Do not copy the 101 response, evidence receipt,
 or completion record into this lab. Your 201 proof starts with your authored
 contract in `lab/starter/`.
 
-[source,bash]
+[source,bash,role="execute"]
 ----
+export LAB_NAMESPACE="$(oc project -q)"
+export LAB_DIR="/tmp/virtualization-ai-201"
+mkdir -p "$LAB_DIR"
 git rev-parse HEAD
 grep -n "upstream-prerequisite" demo-blueprint.yaml
 find lab/starter -maxdepth 1 -type f -print | sort
 ----
+
+== Learn
 
 Checkpoint: you can state what 101 proved and why it does not prove that you can
 construct or qualify the integration.

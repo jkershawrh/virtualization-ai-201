@@ -1,23 +1,88 @@
 = 5. Prove the healthy path
 
-Deploy only after the instructor supplies the namespace and runtime inputs.
-Rehearsal needs no Secret. LIVE requires an externally created Secret and an
-approved endpoint CIDR.
+== Show
 
-[source,bash]
+Launchpad already deployed the qualified runtime for this seat. Do not install
+a second release over it. In the *OpenShift Console* tab, open
+*Virtualization → VirtualMachines* and select `contract-author-vm`. Then open
+*Networking → NetworkPolicies* and compare the live objects with the YAML you
+authored.
+
+From the terminal, prove the same objects and establish a local tunnel to the
+private adapter Service.
+
+[source,bash,role="execute"]
 ----
-helm upgrade --install virtualization-ai-201 charts/virtualization-ai-201 \
-  --namespace "$LAB_NAMESPACE" --create-namespace \
-  --set vm.sshAuthorizedKey="$SSH_PUBLIC_KEY"
-oc -n "$LAB_NAMESPACE" wait deployment/virtualization-ai-201-adapter \
+export LAB_NAMESPACE="${LAB_NAMESPACE:-$(oc project -q)}"
+export LAB_DIR="${LAB_DIR:-/tmp/virtualization-ai-201}"
+export ADAPTER_URL="http://127.0.0.1:18081"
+mkdir -p "$LAB_DIR"
+
+oc wait deployment/virtualization-ai-201-adapter \
   --for=condition=Available --timeout=180s
-virtctl -n "$LAB_NAMESPACE" ssh learner@contract-author-vm \
-  --command 'python3 /home/learner/vm_client.py'
+oc get virtualmachine,virtualmachineinstance,service,networkpolicy -o wide
+
+oc port-forward service/virtualization-ai-201-adapter 18081:8080 \
+  >"$LAB_DIR/port-forward.log" 2>&1 &
+echo $! >"$LAB_DIR/port-forward.pid"
+for attempt in $(seq 1 30); do
+  curl -fsS "$ADAPTER_URL/healthz" >"$LAB_DIR/health.json" && break
+  sleep 2
+done
+jq . "$LAB_DIR/health.json"
 ----
 
-Capture the guest request receipt, response, and `/api/v1/evidence/<evidence-id>`
-record. Verify the same correlation ID appears in all three and that the raw
-note and credential do not appear in evidence.
+== Do
 
-Checkpoint: say `LIVE`, `REHEARSAL`, or `OFFLINE` before interpreting the result.
-Only `LIVE` with complete identity establishes model participation.
+Build a current-session request from the versioned example, replacing its
+namespace and correlation identifier, then call the real adapter.
+
+[source,bash,role="execute"]
+----
+export CORRELATION_ID="$(python3 -c 'import uuid; print(uuid.uuid4())')"
+jq --arg ns "$LAB_NAMESPACE" --arg correlation "$CORRELATION_ID" '
+  .guest.namespace = $ns | .correlation_id = $correlation
+' contracts/examples/qualified-request.json >"$LAB_DIR/request.json"
+
+curl -fsS -X POST "$ADAPTER_URL/api/v1/qualify" \
+  -H 'Content-Type: application/json' \
+  --data-binary @"$LAB_DIR/request.json" \
+  | tee "$LAB_DIR/response.json" | jq .
+----
+
+== Learn
+
+Interpret provenance before interpreting the advisory. A successful live call
+must report `source_state == "LIVE"` and `ai_participated == true`. A fixture
+must report `source_state == "REHEARSAL"` and `ai_participated == false`.
+Neither state grants authority to mutate the VM or cluster.
+
+== Prove
+
+[source,bash,role="execute"]
+----
+jq -e --arg correlation "$CORRELATION_ID" '
+  .correlation_id == $correlation and
+  .outcome == "QUALIFIED" and
+  .validation == "PASS" and
+  .authority == "HUMAN_REVIEW_REQUIRED" and
+  (
+    (.source_state == "LIVE" and .ai_participated == true and .model.id != "") or
+    (.source_state == "REHEARSAL" and .ai_participated == false and .model.id == "rehearsal-fixture")
+  )
+' "$LAB_DIR/response.json"
+
+export EVIDENCE_ID="$(jq -r .evidence_id "$LAB_DIR/response.json")"
+curl -fsS "$ADAPTER_URL/api/v1/evidence/$EVIDENCE_ID" \
+  | tee "$LAB_DIR/evidence.json" | jq .
+jq -e --arg id "$EVIDENCE_ID" --arg correlation "$CORRELATION_ID" '
+  .evidence_id == $id and .correlation_id == $correlation and
+  (.request_sha256 | test("^[0-9a-f]{64}$")) and
+  .authority == "HUMAN_REVIEW_REQUIRED"
+' "$LAB_DIR/evidence.json"
+----
+
+This proves the namespaced adapter contract. VM-origin connectivity remains a
+separate proof: run `/home/learner/vm_client.py` through the instructor-provided
+VM access path and require the same response/evidence correlation before
+claiming the guest path passed.
