@@ -33,3 +33,13 @@ spec:
         - ipBlock: {cidr: {{ .Values.adapter.model.egressCIDR | quote }}}
       ports: [{protocol: TCP, port: 443}]
     {{- end }}
+    {{- if .Values.adapter.model.egressNamespace }}
+    - to:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: {{ .Values.adapter.model.egressNamespace | quote }}
+          podSelector: {}
+      ports:
+        - protocol: TCP
+          port: {{ .Values.adapter.model.egressPort }}
+    {{- end }}

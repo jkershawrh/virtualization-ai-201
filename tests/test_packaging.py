@@ -53,6 +53,8 @@ class PackagingTests(unittest.TestCase):
         self.assertEqual(values["adapter"]["mode"], "rehearsal")
         self.assertEqual(values["adapter"]["model"]["secretName"], "")
         self.assertEqual(values["adapter"]["model"]["egressCIDR"], "")
+        self.assertEqual(values["adapter"]["model"]["egressNamespace"], "")
+        self.assertEqual(values["adapter"]["model"]["egressPort"], 4000)
         self.assertNotIn("password", str(values).lower())
 
     def test_live_render_uses_secret_references_not_values(self):
@@ -69,6 +71,22 @@ class PackagingTests(unittest.TestCase):
         self.assertIn('name: "model-runtime"', render.stdout)
         self.assertNotIn("api-key-value", render.stdout)
         self.assertIn("203.0.113.10/32", render.stdout)
+
+    def test_live_render_can_reach_a_namespaced_managed_model_service(self):
+        render = subprocess.run(
+            [
+                "helm", "template", "virtualization-ai-201", str(CHART),
+                "--set", "adapter.mode=live",
+                "--set", "adapter.model.secretName=model-runtime",
+                "--set", "adapter.model.egressNamespace=launchpad-flightpath-candidate",
+                "--set", "adapter.model.egressPort=4000",
+            ],
+            capture_output=True,
+            text=True,
+        )
+        self.assertEqual(render.returncode, 0, render.stderr)
+        self.assertIn('kubernetes.io/metadata.name: "launchpad-flightpath-candidate"', render.stdout)
+        self.assertIn("port: 4000", render.stdout)
 
     def test_published_overlay_uses_exact_immutable_candidates(self):
         values = yaml.safe_load((CHART / "values.published.yaml").read_text())

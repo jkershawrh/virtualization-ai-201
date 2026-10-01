@@ -8,15 +8,20 @@ a second release over it. In the *OpenShift Console* tab, open
 *Networking → NetworkPolicies* and compare the live objects with the YAML you
 authored.
 
-From the terminal, prove the same objects and establish a local tunnel to the
-private adapter Service.
+From the terminal, prove the same objects, prepare this seat's generated VM
+credential, and establish a local tunnel for health and evidence retrieval.
 
-[source,bash,role="execute"]
+[source,bash,role="execute",subs=attributes+]
 ----
 export LAB_NAMESPACE="${LAB_NAMESPACE:-$(oc project -q)}"
 export LAB_DIR="${LAB_DIR:-/tmp/virtualization-ai-201}"
 export ADAPTER_URL="http://127.0.0.1:18081"
 mkdir -p "$LAB_DIR"
+install -d -m 700 "$(dirname {ssh_key_path})"
+oc get secret virtualization-ai-model-runtime -n "$LAB_NAMESPACE" \
+  -o jsonpath='{.data.VM_SSH_PRIVATE_KEY}' | base64 -d > {ssh_key_path}
+chmod 600 {ssh_key_path}
+test -s {ssh_key_path}
 
 oc wait deployment/virtualization-ai-201-adapter \
   --for=condition=Available --timeout=180s
@@ -34,20 +39,22 @@ jq . "$LAB_DIR/health.json"
 
 == Do
 
-Build a current-session request from the versioned example, replacing its
-namespace and correlation identifier, then call the real adapter.
+Run the installed correlation-aware client inside `contract-author-vm`. The VM
+uses namespace-local Service DNS; it never receives the model credential.
 
-[source,bash,role="execute"]
+[source,bash,role="execute",subs=attributes+]
 ----
-export CORRELATION_ID="$(python3 -c 'import uuid; print(uuid.uuid4())')"
-jq --arg ns "$LAB_NAMESPACE" --arg correlation "$CORRELATION_ID" '
-  .guest.namespace = $ns | .correlation_id = $correlation
-' contracts/examples/qualified-request.json >"$LAB_DIR/request.json"
-
-curl -fsS -X POST "$ADAPTER_URL/api/v1/qualify" \
-  -H 'Content-Type: application/json' \
-  --data-binary @"$LAB_DIR/request.json" \
+virtctl ssh --identity-file={ssh_key_path} \
+  --local-ssh-opts='-o StrictHostKeyChecking=no' \
+  --local-ssh-opts='-o UserKnownHostsFile=/dev/null' \
+  -n "$LAB_NAMESPACE" \
+  --command="sudo env VM_NAMESPACE=$LAB_NAMESPACE VM_NAME=contract-author-vm /home/learner/vm_client.py 'The application resolves the adapter Service and reaches the governed model boundary.'" \
+  learner@vm/contract-author-vm \
+  2>"$LAB_DIR/vm-request-receipt.json" \
   | tee "$LAB_DIR/response.json" | jq .
+
+grep -q 'guest_request_receipt' "$LAB_DIR/vm-request-receipt.json"
+export CORRELATION_ID="$(jq -r .correlation_id "$LAB_DIR/response.json")"
 ----
 
 == Learn
@@ -80,9 +87,14 @@ jq -e --arg id "$EVIDENCE_ID" --arg correlation "$CORRELATION_ID" '
   (.request_sha256 | test("^[0-9a-f]{64}$")) and
   .authority == "HUMAN_REVIEW_REQUIRED"
 ' "$LAB_DIR/evidence.json"
+
+jq -e --arg namespace "$LAB_NAMESPACE" --arg correlation "$CORRELATION_ID" '
+  .guest == ($namespace + "/contract-author-vm") and
+  .correlation_id == $correlation and
+  .service == "virtualization-ai-201-adapter:8080"
+' "$LAB_DIR/evidence.json"
 ----
 
-This proves the namespaced adapter contract. VM-origin connectivity remains a
-separate proof: run `/home/learner/vm_client.py` through the instructor-provided
-VM access path and require the same response/evidence correlation before
-claiming the guest path passed.
+This proves one current-session request originated in the named VM, crossed the
+namespace-local Service boundary, and joined the adapter response to its
+redacted evidence record. Only a `LIVE` response proves model participation.

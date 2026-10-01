@@ -30,7 +30,7 @@ delete the namespace. Launchpad owns full reclamation and zero-residue proof.
 
 Stop the local tunnel and remove only your generated files.
 
-[source,bash,role="execute"]
+[source,bash,role="execute",subs=attributes+]
 ----
 cp "$LAB_DIR/learner-evidence-map.json" /tmp/virtualization-ai-201-evidence.json
 if test -f "$LAB_DIR/port-forward.pid"; then
@@ -38,13 +38,15 @@ if test -f "$LAB_DIR/port-forward.pid"; then
 fi
 rm -f "$LAB_DIR"/*.json "$LAB_DIR"/*.log "$LAB_DIR"/*.pid
 rmdir "$LAB_DIR"
+rm -f "{ssh_key_path}"
 ----
 
 == Prove
 
-[source,bash,role="execute"]
+[source,bash,role="execute",subs=attributes+]
 ----
 test ! -e "$LAB_DIR"
+test ! -e "{ssh_key_path}"
 jq -e '.human_decision == "ACCEPT_FOR_FURTHER_VALIDATION"' \
   /tmp/virtualization-ai-201-evidence.json
 oc auth can-i delete namespaces | grep -qx no

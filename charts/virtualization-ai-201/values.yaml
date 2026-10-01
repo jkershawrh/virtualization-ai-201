@@ -14,6 +14,8 @@ adapter:
     hardwareKey: hardware
     apiKeyKey: api-key
     egressCIDR: ""
+    egressNamespace: ""
+    egressPort: 4000
   resources:
     requests: {cpu: 100m, memory: 128Mi}
     limits: {cpu: 500m, memory: 256Mi}
