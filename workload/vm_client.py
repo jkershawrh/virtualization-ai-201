@@ -38,7 +38,8 @@ def main() -> None:
     }
     print(json.dumps({"guest_request_receipt": receipt}, indent=2), file=sys.stderr)
     request = Request(endpoint, body, {"Content-Type": "application/json"}, method="POST")
-    with urlopen(request, timeout=10) as response:
+    timeout_seconds = int(os.getenv("ADAPTER_TIMEOUT_SECONDS", "90"))
+    with urlopen(request, timeout=timeout_seconds) as response:
         print(json.dumps(json.loads(response.read()), indent=2))
 
 

@@ -33,5 +33,6 @@ request = Request(
     {"Content-Type": "application/json"},
     method="POST",
 )
-with urlopen(request, timeout=10) as response:
+timeout_seconds = int(os.getenv("ADAPTER_TIMEOUT_SECONDS", "90"))
+with urlopen(request, timeout=timeout_seconds) as response:
     print(json.dumps(json.loads(response.read()), indent=2))
