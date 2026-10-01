@@ -88,6 +88,11 @@ class PackagingTests(unittest.TestCase):
         self.assertIn('kubernetes.io/metadata.name: "launchpad-flightpath-candidate"', render.stdout)
         self.assertIn("port: 4000", render.stdout)
 
+    def test_vm_bootstrap_file_exists_before_learner_account_ownership(self):
+        template = (CHART / "templates/vm.yaml").read_text()
+        self.assertIn("owner: root:root", template)
+        self.assertIn("chown, learner:learner, /home/learner/vm_client.py", template)
+
     def test_published_overlay_uses_exact_immutable_candidates(self):
         values = yaml.safe_load((CHART / "values.published.yaml").read_text())
         self.assertEqual(

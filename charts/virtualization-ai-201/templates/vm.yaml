@@ -19,7 +19,10 @@ stringData:
         {{- end }}
     write_files:
       - path: /home/learner/vm_client.py.b64
-        owner: learner:learner
+        # write_files runs before the users module on this Fedora cloud image.
+        # Keep the bootstrap payload root-owned, then transfer ownership of the
+        # decoded executable after the learner account exists in runcmd.
+        owner: root:root
         permissions: '0600'
         content: {{ .Files.Get "files/vm_client.py" | b64enc | quote }}
     runcmd:
