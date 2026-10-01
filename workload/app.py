@@ -97,6 +97,13 @@ def rehearsal_advisory(note: str) -> dict[str, str]:
     }
 
 
+def model_completion_url(endpoint: str) -> str:
+    normalized = endpoint.rstrip("/")
+    if normalized.endswith("/v1"):
+        return f"{normalized}/chat/completions"
+    return normalized
+
+
 def call_live_model(payload: dict, config: dict[str, str]) -> dict[str, str]:
     missing = [key for key in ("endpoint", "model", "provider", "hardware", "api_key") if not config[key]]
     if missing:
@@ -116,7 +123,7 @@ def call_live_model(payload: dict, config: dict[str, str]) -> dict[str, str]:
         "temperature": 0,
     }).encode()
     request = Request(
-        config["endpoint"], body,
+        model_completion_url(config["endpoint"]), body,
         {"Authorization": f"Bearer {config['api_key']}", "Content-Type": "application/json"},
         method="POST",
     )

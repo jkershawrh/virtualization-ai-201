@@ -6,7 +6,13 @@ from unittest.mock import patch
 
 from jsonschema import Draft202012Validator, FormatChecker
 
-from workload.app import ContractError, EVIDENCE, qualify, validate_request
+from workload.app import (
+    ContractError,
+    EVIDENCE,
+    model_completion_url,
+    qualify,
+    validate_request,
+)
 from workload.vm_client import build_request
 
 
@@ -68,6 +74,14 @@ class WorkloadTests(unittest.TestCase):
         lowered = json.dumps(request).lower()
         self.assertNotIn("password", lowered)
         self.assertNotIn("api_key", lowered)
+
+    def test_managed_model_base_url_targets_chat_completions(self):
+        self.assertEqual(
+            model_completion_url("http://launchpad-candidate-maas:4000/v1"),
+            "http://launchpad-candidate-maas:4000/v1/chat/completions",
+        )
+        explicit = "https://models.example.test/v1/chat/completions"
+        self.assertEqual(model_completion_url(explicit), explicit)
 
 
 if __name__ == "__main__":
