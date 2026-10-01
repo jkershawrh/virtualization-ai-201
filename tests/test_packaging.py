@@ -98,6 +98,10 @@ class PackagingTests(unittest.TestCase):
         self.assertTrue(client.startswith("#!/usr/bin/env python3\n"))
         self.assertIn('ADAPTER_TIMEOUT_SECONDS", "90"', client)
 
+    def test_live_adapter_allows_real_model_inference_latency(self):
+        adapter = (ROOT / "workload/app.py").read_text()
+        self.assertIn('MODEL_TIMEOUT_SECONDS", "90"', adapter)
+
     def test_published_overlay_uses_exact_immutable_candidates(self):
         values = yaml.safe_load((CHART / "values.published.yaml").read_text())
         self.assertEqual(

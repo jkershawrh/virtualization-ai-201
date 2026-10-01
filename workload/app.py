@@ -120,7 +120,8 @@ def call_live_model(payload: dict, config: dict[str, str]) -> dict[str, str]:
         {"Authorization": f"Bearer {config['api_key']}", "Content-Type": "application/json"},
         method="POST",
     )
-    with urlopen(request, timeout=8) as response:
+    timeout_seconds = int(os.getenv("MODEL_TIMEOUT_SECONDS", "90"))
+    with urlopen(request, timeout=timeout_seconds) as response:
         result = json.loads(response.read())
     content = result["choices"][0]["message"]["content"]
     advisory = json.loads(content)
