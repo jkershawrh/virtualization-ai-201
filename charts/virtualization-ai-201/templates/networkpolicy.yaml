@@ -28,6 +28,10 @@ spec:
       ports:
         - {protocol: UDP, port: 53}
         - {protocol: TCP, port: 53}
+        # OpenShift's dns-default Service exposes 53 but DNATs to CoreDNS on
+        # 5353; NetworkPolicy is enforced against that destination pod port.
+        - {protocol: UDP, port: 5353}
+        - {protocol: TCP, port: 5353}
     {{- if .Values.adapter.model.egressCIDR }}
     - to:
         - ipBlock: {cidr: {{ .Values.adapter.model.egressCIDR | quote }}}

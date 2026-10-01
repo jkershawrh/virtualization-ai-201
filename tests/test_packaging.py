@@ -30,6 +30,7 @@ class PackagingTests(unittest.TestCase):
             self.assertIn(f"kind: {kind}", render.stdout)
         self.assertIn("kind: Route", render.stdout)
         self.assertIn("name: lab", render.stdout)
+        self.assertIn("port: 5353", render.stdout)
         self.assertNotIn("MODEL_API_KEY\n", render.stdout)
 
     def test_launchpad_flat_image_values_override_nested_defaults(self):
