@@ -93,6 +93,10 @@ class PackagingTests(unittest.TestCase):
         self.assertIn("owner: root:root", template)
         self.assertIn("chown, learner:learner, /home/learner/vm_client.py", template)
 
+    def test_vm_client_is_directly_executable_by_the_learner(self):
+        client = (CHART / "files/vm_client.py").read_text()
+        self.assertTrue(client.startswith("#!/usr/bin/env python3\n"))
+
     def test_published_overlay_uses_exact_immutable_candidates(self):
         values = yaml.safe_load((CHART / "values.published.yaml").read_text())
         self.assertEqual(
