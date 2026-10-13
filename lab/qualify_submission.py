@@ -3,11 +3,16 @@ from __future__ import annotations
 import json
 import pathlib
 import sys
+import argparse
 
 import yaml
 
 
-root = pathlib.Path(sys.argv[1] if len(sys.argv) > 1 else "lab/starter")
+parser = argparse.ArgumentParser(description='Qualify the completed learner stage')
+parser.add_argument('root', nargs='?', default='lab/starter')
+parser.add_argument('--stage', choices=('contract', 'full'), default='full')
+arguments = parser.parse_args()
+root = pathlib.Path(arguments.root)
 required = [
     "qualification-request.schema.json",
     "qualification-response.schema.json",
@@ -16,6 +21,8 @@ required = [
     "service.yaml",
     "networkpolicy.yaml",
 ]
+if arguments.stage == 'contract':
+    required = required[:3]
 errors = []
 for name in required:
     path = root / name
@@ -39,9 +46,9 @@ for name in required:
             errors.append(f"{name} is invalid YAML: {exc}")
 
 secret_text = (root / "secret-reference.yaml").read_text() if (root / "secret-reference.yaml").exists() else ""
-if "secretKeyRef" not in secret_text:
+if arguments.stage == 'full' and "secretKeyRef" not in secret_text:
     errors.append("secret-reference.yaml must use secretKeyRef")
-if "value:" in secret_text:
+if arguments.stage == 'full' and "value:" in secret_text:
     errors.append("secret-reference.yaml must not contain an inline value")
 
 if errors:

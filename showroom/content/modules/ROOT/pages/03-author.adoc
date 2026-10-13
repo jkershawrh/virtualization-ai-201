@@ -14,7 +14,7 @@ must not read, accept, print, or forward a model credential.
 
 [source,bash,role="execute"]
 ----
-python3 lab/qualify_submission.py lab/starter
+python3 lab/qualify_submission.py lab/starter --stage contract
 python3 -m json.tool lab/starter/qualification-request.schema.json >/dev/null
 python3 -m json.tool lab/starter/qualification-response.schema.json >/dev/null
 ----

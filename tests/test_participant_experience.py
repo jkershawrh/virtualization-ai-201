@@ -1,6 +1,10 @@
 from pathlib import Path
 import yaml
 import unittest
+import subprocess
+import tempfile
+import json
+import sys
 
 ROOT = Path(__file__).resolve().parents[1]
 PAGES = ROOT / "showroom/content/modules/ROOT/pages"
@@ -8,6 +12,19 @@ PAGES = ROOT / "showroom/content/modules/ROOT/pages"
 
 
 class ParticipantExperienceTests(unittest.TestCase):
+    def test_contract_stage_does_not_require_later_wire_stage_files(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            for name in ('qualification-request.schema.json', 'qualification-response.schema.json'):
+                (root / name).write_text(json.dumps({'additionalProperties': False}))
+            (root / 'vm_client.py').write_text('print("bounded client")\n')
+            command = [sys.executable, str(ROOT / 'lab/qualify_submission.py'), str(root)]
+            contract = subprocess.run(command + ['--stage', 'contract'], capture_output=True, text=True)
+            assert contract.returncode == 0, contract.stdout + contract.stderr
+            full = subprocess.run(command, capture_output=True, text=True)
+            assert full.returncode != 0
+            assert 'missing networkpolicy.yaml' in full.stdout
+
     def test_every_playbook_packages_the_partnership_skin_and_execute_bridge(self):
         for path in (ROOT / "default-site.yml", ROOT / "showroom/default-site.yml"):
             if not path.exists():
