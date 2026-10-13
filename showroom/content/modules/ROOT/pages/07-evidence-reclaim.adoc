@@ -36,7 +36,7 @@ cp "$LAB_DIR/learner-evidence-map.json" /tmp/virtualization-ai-201-evidence.json
 if test -f "$LAB_DIR/port-forward.pid"; then
   kill "$(cat "$LAB_DIR/port-forward.pid")" 2>/dev/null || true
 fi
-rm -f "$LAB_DIR"/*.json "$LAB_DIR"/*.log "$LAB_DIR"/*.pid
+rm -f "$LAB_DIR"/*.json "$LAB_DIR"/*.log "$LAB_DIR"/*.pid "$LAB_DIR"/*.txt
 rmdir "$LAB_DIR"
 rm -f "{ssh_key_path}"
 ----
@@ -49,7 +49,8 @@ test ! -e "$LAB_DIR"
 test ! -e "{ssh_key_path}"
 jq -e '.human_decision == "ACCEPT_FOR_FURTHER_VALIDATION"' \
   /tmp/virtualization-ai-201-evidence.json
-oc auth can-i delete namespaces | grep -qx no
+NAMESPACE_DELETE_ALLOWED="$(oc auth can-i delete namespaces || true)"
+test "$NAMESPACE_DELETE_ALLOWED" = "no"
 oc get virtualmachine contract-author-vm -o name
 oc get deployment virtualization-ai-201-adapter -o name
 ----

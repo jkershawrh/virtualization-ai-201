@@ -18,7 +18,13 @@ starter fields remain incomplete.
 
 [source,bash,role="execute"]
 ----
-python3 lab/qualify_submission.py lab/starter
+if python3 lab/qualify_submission.py lab/starter > "$LAB_DIR/starter-red.txt"; then
+  echo "Expected incomplete starters on a fresh lab; inspect before continuing"
+  false
+else
+  grep -q '^RED:' "$LAB_DIR/starter-red.txt"
+fi
+cat "$LAB_DIR/starter-red.txt"
 ----
 
 Checkpoint: every failed check maps to one authored artifact, not to a hidden

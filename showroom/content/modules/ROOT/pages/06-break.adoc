@@ -7,6 +7,9 @@ VM, Service, schemas, correlation rules, and human authority unchanged.
 
 [source,bash,role="execute"]
 ----
+jq --arg namespace "$LAB_NAMESPACE" --arg correlation "$(uuidgen | tr '[:upper:]' '[:lower:]')" \
+  '.guest.namespace=$namespace | .correlation_id=$correlation' \
+  contracts/examples/qualified-request.json > "$LAB_DIR/request.json"
 curl -fsS -X POST "$ADAPTER_URL/api/v1/qualify?condition=unavailable" \
   -H 'Content-Type: application/json' \
   --data-binary @"$LAB_DIR/request.json" \

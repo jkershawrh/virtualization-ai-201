@@ -6,6 +6,7 @@ content:
     - url: ./content
       branches: HEAD
 ui:
+  supplemental_files: ./supplemental-ui
   bundle:
     url: https://github.com/rhpds/rhdp_showroom_theme/releases/download/v2.0.3/ui-bundle.zip
     snapshot: true

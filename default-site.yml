@@ -6,6 +6,7 @@ content:
     - url: .
       start_path: showroom/content
 ui:
+  supplemental_files: showroom/supplemental-ui
   bundle:
     url: https://github.com/rhpds/rhdp_showroom_theme/releases/download/v2.0.3/ui-bundle.zip
     snapshot: true
