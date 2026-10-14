@@ -12,6 +12,10 @@ PAGES = ROOT / "showroom/content/modules/ROOT/pages"
 
 
 class ParticipantExperienceTests(unittest.TestCase):
+    def test_wire_stage_renders_the_named_secret_reference_not_an_empty_default(self):
+        page = (PAGES / '04-wire.adoc').read_text()
+        assert '--set adapter.model.secretName=virtualization-ai-model-runtime' in page
+
     def test_prerequisite_installs_the_pinned_qualifier_dependency_in_an_owned_environment(self):
         page = (PAGES / '01-prerequisite.adoc').read_text()
         assert 'python3 -m venv "$LAB_REPO/.venv"' in page

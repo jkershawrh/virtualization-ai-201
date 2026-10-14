@@ -18,6 +18,7 @@ or evidence record.
 python3 lab/qualify_submission.py lab/starter
 helm template learner charts/virtualization-ai-201 \
   --set adapter.mode=rehearsal \
+  --set adapter.model.secretName=virtualization-ai-model-runtime \
   --set vm.sshAuthorizedKey='ssh-ed25519 REPLACE_AT_RUNTIME' >/tmp/learner-render.yaml
 grep -nE 'secretKeyRef|NetworkPolicy|kind: Service' /tmp/learner-render.yaml
 ----
