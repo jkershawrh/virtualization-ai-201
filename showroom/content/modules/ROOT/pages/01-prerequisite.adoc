@@ -38,7 +38,17 @@ test "$(git rev-parse HEAD)" = "$SOURCE_REVISION"
 git rev-parse HEAD
 grep -n "upstream-prerequisite" demo-blueprint.yaml
 find lab/starter -maxdepth 1 -type f -print | sort
+if test ! -x "$LAB_REPO/.venv/bin/python"; then
+  python3 -m venv "$LAB_REPO/.venv"
+fi
+source "$LAB_REPO/.venv/bin/activate"
+python -m pip install --disable-pip-version-check --retries 3 --timeout 30 -r lab/requirements.txt
+python -c 'import yaml; print("qualifier dependency ready:", yaml.__version__)'
 ----
+
+Keep this terminal's lab environment active for the following steps. It installs
+only the pinned qualifier dependency into your repository's `.venv`; it does not
+alter the shared terminal image or install anything into the VM.
 
 == Learn
 

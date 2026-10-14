@@ -12,6 +12,14 @@ PAGES = ROOT / "showroom/content/modules/ROOT/pages"
 
 
 class ParticipantExperienceTests(unittest.TestCase):
+    def test_prerequisite_installs_the_pinned_qualifier_dependency_in_an_owned_environment(self):
+        page = (PAGES / '01-prerequisite.adoc').read_text()
+        assert 'python3 -m venv "$LAB_REPO/.venv"' in page
+        assert 'source "$LAB_REPO/.venv/bin/activate"' in page
+        assert 'python -m pip install' in page
+        assert '-r lab/requirements.txt' in page
+        assert (ROOT / 'lab/requirements.txt').read_text().strip() == 'PyYAML==6.0.3'
+
     def test_immutable_root_playbook_uses_the_user_data_merged_content(self):
         image = (ROOT / 'showroom-content/Containerfile').read_text()
         assert 'showroom/default-site.yml /bundle/default-site.yml' in image
