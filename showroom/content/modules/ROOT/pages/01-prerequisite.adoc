@@ -17,8 +17,15 @@ export LAB_DIR="/tmp/virtualization-ai-201"
 mkdir -p "$LAB_DIR"
 export LAB_REPO="$HOME/virtualization-ai-201"
 export SOURCE_REVISION="{content_revision}"
+[[ "$SOURCE_REVISION" =~ ^[0-9a-f]{40}$ ]] || { echo "The guide did not supply a pinned source revision; stop and contact your instructor"; false; }
 if test -d "$LAB_REPO/.git"; then
-  test "$(git -C "$LAB_REPO" rev-parse HEAD)" = "$SOURCE_REVISION"
+  test "$(git -C "$LAB_REPO" remote get-url origin)" = "https://github.com/jkershawrh/virtualization-ai-201.git"
+  if git -C "$LAB_REPO" rev-parse --verify HEAD >/dev/null 2>&1; then
+    test "$(git -C "$LAB_REPO" rev-parse HEAD)" = "$SOURCE_REVISION"
+  else
+    git -C "$LAB_REPO" fetch --depth 1 origin "$SOURCE_REVISION"
+    git -C "$LAB_REPO" checkout --detach FETCH_HEAD
+  fi
 else
   test ! -e "$LAB_REPO" || { echo "Repository path already contains unrelated files"; false; }
   git init "$LAB_REPO"

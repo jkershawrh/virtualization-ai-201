@@ -21,6 +21,8 @@ RUN git init /out/content \
 FROM scratch
 COPY --from=builder --chown=1001:0 /out/content-loader /content-loader
 COPY --chown=1001:0 showroom /bundle/showroom
+COPY --chown=1001:0 showroom/default-site.yml /bundle/default-site.yml
+COPY --chown=1001:0 showroom/supplemental-ui /bundle/supplemental-ui
 # Preserve a minimal Git worktree at both paths used by the runtime contract.
 # The playbook resolves ./content relative to /showroom/repo/showroom, while
 # Launchpad also validates the stable top-level /showroom/repo/content path.

@@ -12,6 +12,19 @@ PAGES = ROOT / "showroom/content/modules/ROOT/pages"
 
 
 class ParticipantExperienceTests(unittest.TestCase):
+    def test_immutable_root_playbook_uses_the_user_data_merged_content(self):
+        image = (ROOT / 'showroom-content/Containerfile').read_text()
+        assert 'showroom/default-site.yml /bundle/default-site.yml' in image
+        assert 'showroom/supplemental-ui /bundle/supplemental-ui' in image
+        playbook = yaml.safe_load((ROOT / 'showroom/default-site.yml').read_text())
+        assert playbook['content']['sources'][0]['url'] == './content'
+
+    def test_bootstrap_retries_only_an_empty_owned_repository(self):
+        page = (PAGES / '01-prerequisite.adoc').read_text()
+        assert 'rev-parse --verify HEAD' in page
+        assert 'remote get-url origin' in page
+        assert '^[0-9a-f]{40}$' in page
+
     def test_contract_stage_does_not_require_later_wire_stage_files(self):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
